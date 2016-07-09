@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
-const token = "EAAEALWwyZBLIBAJC9Gkxe10xnZB6iQb6xWT3NUH5q5uN8ZCZALOijRanGq3p2xsRS2kpX3QqlUZCSNzdQhYsiehmjJNZA6C6Pkw9YnSu9b9k0BztMDe7UIsMWT1KSqRJyAUBCcYOCI8liV2kFBd80S7jg2khyKbH5OGDQInaefZBAZDZD";
+const token = "EAAI3np0nrmYBAAPDyQglzsz1bEJTQ4JHZAStdZC3EivStE7IBknZCZChTOwvRBjE9ZAny0iNyrw3DuYCAdmqzsOby7oJVtNjS4w5GsDPLDWCZCIjMBnvuEImgBcTbY6FRZCxaDIPYh5RaLmffrddCG43cbZA8HsWqYnNJSm5mfoiFgZDZD";
 app.set('port', (process.env.PORT || 5000));
 
 // Process application/x-www-form-urlencoded
@@ -21,9 +21,9 @@ app.get('/', function (req, res) {
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
     if (req.query['hub.verify_token'] === 'i_need_help_here') {
-        res.send(req.query['hub.challenge'])
+        res.send(req.query['hub.challenge']);
     }
-    res.send('Error, wrong token')
+    res.send('Error, wrong token');
 });
 
 app.post('/webhook/', function (req, res) {
