@@ -40,7 +40,7 @@ function processEvent(event) {
                 let responseText = response.result.fulfillment.speech;
                 let responseData = response.result.fulfillment.data;
                 let action = response.result.action;
-
+                console.log(action);
                 if (isDefined(responseData) && isDefined(responseData.facebook)) {
                     try {
                         console.log('Response as formatted message');
@@ -53,7 +53,6 @@ function processEvent(event) {
                     // facebook API limit for text length is 320,
                     // so we split message if needed
                     var splittedText = splitResponse(responseText);
-                    console.log(splittedText[0]);
 
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {text: textPart}, callback);
