@@ -222,29 +222,13 @@ function sendFBMessage(sender, messageData, callback) {
                                 "subtitle": "Provides help to refugee",
                                 "Contact": 4083454545,
                                 "distance": 50,
-                                "currency": "USD",
-                                "address": {
-                                    "street_1": "1 Hacker Way",
-                                    "street_2": "",
-                                    "city": "Menlo Park",
-                                    "postal_code": "94025",
-                                    "state": "CA",
-                                    "country": "US"
-                                }
+                                "currency": "USD"
                             }, {
                                 "title": "Other Organisation",
                                 "subtitle": "Provides Food",
                                 "Contact": 123455567,
                                 "distance": 25,
-                                "currency": "USD",
-                                "address": {
-                                    "street_1": "1 Hacker Way",
-                                    "street_2": "",
-                                    "city": "Menlo Park",
-                                    "postal_code": "94025",
-                                    "state": "CA",
-                                    "country": "US"
-                                }
+                                "currency": "USD"
                             }]
                         }
                     }
