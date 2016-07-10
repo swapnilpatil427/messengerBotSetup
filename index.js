@@ -97,7 +97,7 @@ function processEvent(event) {
                                 if (err) console.error(err);
                                 else console.log(response);
                             });
-                            console.log(refugeeID + refugeeZipCode + refugeePhone);
+                            console.log("sddsd"+ refugeeID + refugeeZipCode + refugeePhone);
                         }
                     }
                     //console.log("params"+params.RefugeeLocation);
