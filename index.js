@@ -113,6 +113,7 @@ function processEvent(event) {
 
                             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                                 //console.log("latitude" +response.longitude);
+                                console.log(response);
                             });
                             new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
                                 registrationTokens: regTokens
