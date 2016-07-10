@@ -98,37 +98,37 @@ function processEvent(event) {
                         if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
                             // Set up the sender with you API key, prepare your recipients' registration tokens.
 
-                        /*    con.query('CALL read_refugee()', function(err, rows) {
-                                if (err) {
-                                    console.log(err);
-                                }
+                            /*    con.query('CALL read_refugee()', function(err, rows) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
 
-                                console.log('Data received from Db:\n');
-                                console.log(rows);
-                            }); */
+                                    console.log('Data received from Db:\n');
+                                    console.log(rows);
+                                }); */
 
                             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                                 console.log("I am here");
-                            //    console.log("latitude" +response.latitude);
-                            //    console.log("longitude" + response.longitude);
-                            var message = new gcm.Message({
-                                data: {
-                                    refugeeID: response.latitude,
-                                    refugeeZipCode: refugeeZipCode,
-                                    refugeePhone: response.longitude,
-                                    message: "I am here, please find me, i need your help."
-                                },
-                                notification: {
-                                    title: "New Refugee Found",
-                                    body: "New Refugee found at location." + refugeeZipCode
-                                }
-                            });
-                            new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
-                                registrationTokens: regTokens
-                            }, function(err, response) {
-                                if (err) console.error(err);
-                                else console.log(response);
-                            });
+                                //    console.log("latitude" +response.latitude);
+                                //    console.log("longitude" + response.longitude);
+                                var message = new gcm.Message({
+                                    data: {
+                                        refugeeID: response.latitude,
+                                        refugeeZipCode: refugeeZipCode,
+                                        refugeePhone: response.longitude,
+                                        message: "I am here, please find me, i need your help."
+                                    },
+                                    notification: {
+                                        title: "New Refugee Found",
+                                        body: "New Refugee found at location." + refugeeZipCode
+                                    }
+                                });
+                                new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
+                                    registrationTokens: regTokens
+                                }, function(err, response) {
+                                    if (err) console.error(err);
+                                    else console.log(response);
+                                });
                                 con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
                                     if (err) {
                                         console.log(err);
@@ -197,130 +197,153 @@ function chunkString(s, len) {
 
 function sendFBMessage(sender, messageData, callback) {
     request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {
-            access_token: FB_PAGE_ACCESS_TOKEN
-        },
-        method: 'POST',
-        json: {
-            recipient: {
-                id: sender
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {
+                access_token: FB_PAGE_ACCESS_TOKEN
             },
-            message: messageData
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending message: ', error);
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error);
-        }
-
-        if (callback) {
-            callback();
-        }
-    });
-}
-
-function doSubscribeRequest() {
-    request({
             method: 'POST',
-            uri: "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=" + FB_PAGE_ACCESS_TOKEN
-        },
-        function(error, response, body) {
-            if (error) {
-                console.error('Error while subscription: ', error);
-            } else {
-                console.log('Subscription result: ', response.body);
+            json: {
+                recipient: {
+                    id: sender
+                },
+                "message": {
+                    "attachment": {
+                        "type": "template",
+                        "payload": {
+                            "template_type": "generic",
+                            "elements": [{
+                                "title": "Welcome to Peter\'s Hats",
+                                "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
+                                "subtitle": "We\'ve got the right hat for everyone.",
+                                "buttons": [{
+                                    "type": "web_url",
+                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                    "title": "View Website"
+                                }, {
+                                    "type": "postback",
+                                    "title": "Start Chatting",
+                                    "payload": "USER_DEFINED_PAYLOAD"
+                                }]
+                            }]
+                        }
+                    }
+                }
+            },
+            function(error, response, body) {
+                if (error) {
+                    console.log('Error sending message: ', error);
+                } else if (response.body.error) {
+                    console.log('Error: ', response.body.error);
+                }
+
+                if (callback) {
+                    callback();
+                }
+            });
+    }
+
+    function doSubscribeRequest() {
+        request({
+                method: 'POST',
+                uri: "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=" + FB_PAGE_ACCESS_TOKEN
+            },
+            function(error, response, body) {
+                if (error) {
+                    console.error('Error while subscription: ', error);
+                } else {
+                    console.log('Subscription result: ', response.body);
+                }
+            });
+    }
+
+    function isDefined(obj) {
+        if (typeof obj == 'undefined') {
+            return false;
+        }
+
+        if (!obj) {
+            return false;
+        }
+
+        return obj != null;
+    }
+
+    const app = express();
+    app.use(bodyParser.urlencoded({
+        extended: true
+    }));
+    app.use(bodyParser.text({
+        type: 'application/json'
+    }));
+
+    app.get('/listrefugees', function(req, res) {
+        con.query('CALL read_refugee()', function(err, rows) {
+            if (err) {
+                console.log(err);
             }
+            console.log(rows);
+            res.write(JSON.stringify(rows));
+            res.end();
         });
-}
-
-function isDefined(obj) {
-    if (typeof obj == 'undefined') {
-        return false;
-    }
-
-    if (!obj) {
-        return false;
-    }
-
-    return obj != null;
-}
-
-const app = express();
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.text({
-    type: 'application/json'
-}));
-
-app.get('/listrefugees', function(req,res) {
-    con.query('CALL read_refugee()', function(err, rows) {
-        if (err) {
-            console.log(err);
-        }
-        console.log(rows);
-        res.write(JSON.stringify(rows));
-        res.end();
     });
-});
 
-app.get('/refugee/:id', function(req,res) {
-    con.query('CALL get_refugee('+ req.params.id +')', function(err, rows) {
-        if (err) {
-            console.log(err);
-        }
-        console.log(rows);
-        res.write(JSON.stringify(rows));
-        res.end();
+    app.get('/refugee/:id', function(req, res) {
+        con.query('CALL get_refugee(' + req.params.id + ')', function(err, rows) {
+            if (err) {
+                console.log(err);
+            }
+            console.log(rows);
+            res.write(JSON.stringify(rows));
+            res.end();
+        });
     });
-});
 
-app.post('/sms', (req, res) => {
-    console.log('POST sms received');
-    try {
-        bot.processMessage(req, res);
-    } catch (err) {
-        return res.status(400).send('Error while processing ' + err.message);
-    }
-});
-
-
-
-app.get('/webhook/', function(req, res) {
-    if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
-        res.send(req.query['hub.challenge']);
-
-        setTimeout(function() {
-            doSubscribeRequest();
-        }, 3000);
-    } else {
-        res.send('Error, wrong validation token');
-    }
-});
-
-app.post('/webhook/', function(req, res) {
-    try {
-        var data = JSONbig.parse(req.body);
-
-        var messaging_events = data.entry[0].messaging;
-        for (var i = 0; i < messaging_events.length; i++) {
-            var event = data.entry[0].messaging[i];
-            processEvent(event);
+    app.post('/sms', (req, res) => {
+        console.log('POST sms received');
+        try {
+            bot.processMessage(req, res);
+        } catch (err) {
+            return res.status(400).send('Error while processing ' + err.message);
         }
-        return res.status(200).json({
-            status: "ok"
-        });
-    } catch (err) {
-        return res.status(400).json({
-            status: "error",
-            error: err
-        });
-    }
+    });
 
-});
 
-app.listen(REST_PORT, function() {
-    console.log('Rest service ready on port ' + REST_PORT);
-});
 
-doSubscribeRequest();
+    app.get('/webhook/', function(req, res) {
+        if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
+            res.send(req.query['hub.challenge']);
+
+            setTimeout(function() {
+                doSubscribeRequest();
+            }, 3000);
+        } else {
+            res.send('Error, wrong validation token');
+        }
+    });
+
+    app.post('/webhook/', function(req, res) {
+        try {
+            var data = JSONbig.parse(req.body);
+
+            var messaging_events = data.entry[0].messaging;
+            for (var i = 0; i < messaging_events.length; i++) {
+                var event = data.entry[0].messaging[i];
+                processEvent(event);
+            }
+            return res.status(200).json({
+                status: "ok"
+            });
+        } catch (err) {
+            return res.status(400).json({
+                status: "error",
+                error: err
+            });
+        }
+
+    });
+
+    app.listen(REST_PORT, function() {
+        console.log('Rest service ready on port ' + REST_PORT);
+    });
+
+    doSubscribeRequest();
