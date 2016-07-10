@@ -42,17 +42,7 @@ con.connect(function(err) {
     }); */
 });
 con.query(
-"create table refugee
-  (
-  ID integer,
-  zipcode integer,
-  phone text,
-  age integer,
-  Gender varchar(10),
-  Disability varchar(20),
-  latitude varchar(20),
-  longitude varchar(20)
-  )",
+    'create table refugee ( ID integer, zipcode integer,phone text, age integer, gender varchar(10),disability varchar(20),latitude varchar(20),longitude varchar(20) )',
   function (err, result) {
     if (err) throw err;
 
