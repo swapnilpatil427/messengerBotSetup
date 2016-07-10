@@ -21,14 +21,6 @@ const apiAiService = apiai(APIAI_ACCESS_TOKEN, {
 const sessionIds = new Map();
 var gcm = require('node-gcm');
 
-
-
-// Set up the sender with you API key, prepare your recipients' registration tokens.
-var sender = new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU');
-var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
-
-
-
 function processEvent(event) {
     var sender = event.sender.id.toString();
     if (event.message && event.message.text) {
@@ -62,6 +54,9 @@ function processEvent(event) {
                         let refugeeZipCode = params.RefugeeLocation || "";
                         let refugeePhone = params.RefugeePhone || "";
                         if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
+                            // Set up the sender with you API key, prepare your recipients' registration tokens.
+                            var sender = new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU');
+                            var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
                             var message = new gcm.Message({
                                 data: {
                                     refugeeID: refugeeID,
@@ -81,7 +76,6 @@ function processEvent(event) {
                             });
                             console.log(refugeeID + refugeeZipCode + refugeePhone);
                         }
-                        console.log("params" + JSON.stringify(response.result));
                     }
                     //console.log("params"+params.RefugeeLocation);
                     var splittedText = splitResponse(responseText);
