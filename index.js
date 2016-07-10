@@ -43,8 +43,10 @@ function processEvent(event) {
                         sendFBMessage(sender, {text: err.message });
                     }
                 } else if (isDefined(responseText)) {
-                    let params = response.result.parameters;
-                    console.log("params"+JSON.stringify(response.result));
+                    if(action === "actionID") {
+                        let params = response.result.parameters;
+                        console.log("params"+JSON.stringify(response.result));
+                    }
                     //console.log("params"+params.RefugeeLocation);
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
