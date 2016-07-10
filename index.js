@@ -246,6 +246,18 @@ app.use(bodyParser.text({
     type: 'application/json'
 }));
 
+app.get('/listrefugees', function(req,res) {
+    con.query('CALL read_refugee()', function(err, rows) {
+        if (err) {
+            console.log(err);
+        }
+        console.log(rows);
+        res.write(JSON.stringify(rows));
+        res.end();
+
+    });
+})
+
 app.get('/webhook/', function(req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
