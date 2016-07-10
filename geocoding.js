@@ -73,10 +73,11 @@ geocoder.geocode('201 S 4th Street, San Jose, California', function(err, res) {
 });
 
 exports.getAllVolunteers = function(address) {
-    getGeoCode(address, function(response) {
+    console.log("I am here");
+    /* getGeoCode(address, function(response) {
         return response;
         //notify(response.latitude , response.longitude);
-    });
+    }); */
 }
 
 function getAllNearByOrg (geocode) {
