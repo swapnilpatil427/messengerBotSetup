@@ -51,15 +51,6 @@ con.connect(function(err) {
     }); */
 });
 
-con.query('CALL read_refugee()', function(err, rows) {
-    if (err) {
-        console.log(err);
-    }
-
-    console.log('Data received from Db:\n');
-    console.log(rows);
-});
-
 var gcm = require('node-gcm');
 var regTokens = ['eTAhKXGmMyk:APA91bG0vkKehF24-57gEg_jUtNXmSAv0RbYfOdHN1eJxh8Vt0SwvnwGdJ0u0s4vYuha4N36fASZb6cASXmosrrsTWj-R3SpasV2A8zWne-TkhCaPNrqyDqSHqSJEIc0Ck_ySDpcl4SU'];
 
@@ -91,7 +82,39 @@ function processEvent(event) {
                     }
                 } else if (isDefined(responseText)) {
                     afterResponseData(action, response, responseText);
+                    let refugeeZipCode = params.RefugeeLocation || "";
                     //console.log("params"+params.RefugeeLocation);
+                    geocoding.getAllVolunteers(refugeeZipCode, function(response) {
+                        //console.log(response);
+                        con.query('CALL get_refugee('+response.latitude+','+response.longitude+')', function(err, rows) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            var elements = [];
+                            foreach(row in rows[0]) {
+                                elements.push({
+                                    "title": row.name,
+                                    "subtitle": row.address,
+                                    "buttons": [{
+                                        "type": "web_url",
+                                        "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                        "title": row.phone
+                                    }]
+                                });
+                            }
+                            //console.log(JSON.stringify(rows[0][0]));
+                            var message = {
+                                "attachment": {
+                                    "type": "template",
+                                    "payload": {
+                                        "template_type": "generic",
+                                        "elements": elements;
+                                    }
+                                }
+                            };
+                            sendFBMessage(sender, responseData.facebook);
+                        });
+                    });
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {
@@ -109,7 +132,7 @@ function processEvent(event) {
 
 exports.afterResponse = afterResponseData;
 
-function afterResponseData(action, response, responseText) {
+function afterResponseData(action, response, responseText,sender) {
     if (action === "actionID") {
         let params = response.result.parameters || "";
         let refugeeID = params.RefugeeID || "";
@@ -154,16 +177,7 @@ function afterResponseData(action, response, responseText) {
                     if (err) console.error(err);
                     else console.log(response);
                 });
-                geocoding.getAllVolunteers(refugeeZipCode, function(response) {
-                    //console.log(response);
-                    con.query('CALL get_refugee('+response.latitude+','+response.longitude+')', function(err, rows) {
-                        if (err) {
-                            console.log(err);
-                        }
 
-                        console.log(JSON.stringify(rows[0][0]));
-                    });
-                });
 
             });
 
