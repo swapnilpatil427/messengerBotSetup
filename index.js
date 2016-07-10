@@ -122,7 +122,7 @@ function processEvent(event) {
                                 if (err) console.error(err);
                                 else console.log(response);
                             });
-                                con.query('CALL get_refugee(37.383411,-121.919662)', function(err, rows) {
+                                con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
                                     if (err) {
                                         console.log(err);
                                     }
