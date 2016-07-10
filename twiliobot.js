@@ -103,7 +103,7 @@ module.exports = class TwilioBot {
                                                 var elements = "";
                                                 if (rows[0].length != 0) {
                                                     rows[0].forEach(function(row) {
-                                                        elements = "Name : " + row.name + "Description :" + row.description + "phoneNumber :" + row.phone + "\n";
+                                                        elements = "Name : " + row.name + "Description :" + row.description + "phoneNumber :" + row.phone;
                                                     });
                                                 }
 
