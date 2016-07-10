@@ -316,6 +316,17 @@ app.get('/refugee/:id', function(req, res) {
 
 app.post('/refugee', function(req, res){
     //console.log()
+    var id = req.params.refugeeID;
+    var address = req.params.refugeeAddress;
+    var phoneNumber = req.params.refugeePhone;
+    con.query('CALL insert_refugee('+ id + ',"swapnil",' + adress + ',"95112",'+ phoneNumber + ",12,M,NO,127.123,123.123"')', function(err, rows) {
+        if (err) {
+            console.log(err);
+        }
+        console.log(rows);
+        res.write(JSON.stringify(rows));
+        res.end();
+    });
 });
 
 app.post('/sms', (req, res) => {
