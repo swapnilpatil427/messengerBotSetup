@@ -218,40 +218,33 @@ function sendFBMessage(sender, messageData, callback) {
                             "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
                             "timestamp": "1428444852",
                             "elements": [{
-                                "title": "Classic White T-Shirt",
-                                "subtitle": "100% Soft and Luxurious Cotton",
-                                "quantity": 2,
-                                "price": 50,
+                                "title": "Medair",
+                                "subtitle": "Provides help to refugee",
+                                "Contact": 4083454545,
+                                "distance": 50,
                                 "currency": "USD",
-                                "image_url": "http://petersapparel.parseapp.com/img/whiteshirt.png"
+                                "address": {
+                                    "street_1": "1 Hacker Way",
+                                    "street_2": "",
+                                    "city": "Menlo Park",
+                                    "postal_code": "94025",
+                                    "state": "CA",
+                                    "country": "US"
+                                }
                             }, {
-                                "title": "Classic Gray T-Shirt",
-                                "subtitle": "100% Soft and Luxurious Cotton",
-                                "quantity": 1,
-                                "price": 25,
+                                "title": "Other Organisation",
+                                "subtitle": "Provides Food",
+                                "Contact": 123455567,
+                                "distance": 25,
                                 "currency": "USD",
-                                "image_url": "http://petersapparel.parseapp.com/img/grayshirt.png"
-                            }],
-                            "address": {
-                                "street_1": "1 Hacker Way",
-                                "street_2": "",
-                                "city": "Menlo Park",
-                                "postal_code": "94025",
-                                "state": "CA",
-                                "country": "US"
-                            },
-                            "summary": {
-                                "subtotal": 75.00,
-                                "shipping_cost": 4.95,
-                                "total_tax": 6.19,
-                                "total_cost": 56.14
-                            },
-                            "adjustments": [{
-                                "name": "New Customer Discount",
-                                "amount": 20
-                            }, {
-                                "name": "$10 Off Coupon",
-                                "amount": 10
+                                "address": {
+                                    "street_1": "1 Hacker Way",
+                                    "street_2": "",
+                                    "city": "Menlo Park",
+                                    "postal_code": "94025",
+                                    "state": "CA",
+                                    "country": "US"
+                                }
                             }]
                         }
                     }
