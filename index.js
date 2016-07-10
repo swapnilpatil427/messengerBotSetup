@@ -67,7 +67,7 @@ function processEvent(event) {
                                     body: "New Refugee found at location." + refugeeZipCode
                                 }
                             });
-                            //var sender = new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU');
+                            var sender = new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU');
                             sender.send(message, {
                                 registrationTokens: regTokens
                             }, function(err, response) {
