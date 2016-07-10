@@ -138,9 +138,9 @@ function afterResponseData(action, response, responseText) {
                 //    console.log("longitude" + response.longitude);
                 var message = new gcm.Message({
                     data: {
-                        refugeeID: response.latitude,
+                        refugeeID: refugeeID,
                         refugeeZipCode: refugeeZipCode,
-                        refugeePhone: response.longitude,
+                        refugeePhone: refugeePhone,
                         message: "I am here, please find me, i need your help."
                     },
                     notification: {
