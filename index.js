@@ -179,6 +179,7 @@ function afterResponseData(action, response, responseText) {
                 }); */
             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                 console.log("I am here");
+                insertDb (id,address,phoneNumber);
                 //    console.log("latitude" +response.latitude);
                 //    console.log("longitude" + response.longitude);
                 var message = new gcm.Message({
