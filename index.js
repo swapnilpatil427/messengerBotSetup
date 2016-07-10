@@ -82,7 +82,7 @@ function processEvent(event) {
                     }
                 } else if (isDefined(responseText)) {
                     afterResponseData(action, response, responseText);
-                    let refugeeZipCode = params.RefugeeLocation || "";
+                    let refugeeZipCode = response.result.parameters.RefugeeLocation || "";
                     //console.log("params"+params.RefugeeLocation);
                     geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                         //console.log(response);
@@ -132,7 +132,7 @@ function processEvent(event) {
 
 exports.afterResponse = afterResponseData;
 
-function afterResponseData(action, response, responseText, sender) {
+function afterResponseData(action, response, responseText) {
     if (action === "actionID") {
         let params = response.result.parameters || "";
         let refugeeID = params.RefugeeID || "";
