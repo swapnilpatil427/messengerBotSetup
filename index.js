@@ -21,38 +21,40 @@ const FB_VERIFY_TOKEN = "i_need_help_here";
 const FB_PAGE_ACCESS_TOKEN = "EAAZAqQj1VP6wBAOjsswZAQFIBBfCo482jaMG4489l9GsWTMHZBIyKQvXGyhI0vtEj6RsrnpY5ZBHaDAzyyZC5OyYEoyxGTmLmtSZAqm1U73IQ4QqzxnpCHQ95ykB4DlRNEk4Aqof5lWYAMtAcAaH7nmS4R4s4iwglAMNy2oxylkwZDZD";
 
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {
-    language: APIAI_LANG,
+  language: APIAI_LANG,
     requestSource: "fb"
 });
+
 const botConfig = new TwilioBotConfig(APIAI_ACCESS_TOKEN, APIAI_LANG);
 const bot = new TwilioBot(botConfig);
 const sessionIds = new Map();
 var mysql = require("mysql");
-var con = mysql.createConnection({
-    host: "us-cdbr-iron-east-04.cleardb.net",
+var con = mysql.createConnection( {
+  host: "us-cdbr-iron-east-04.cleardb.net",
     user: "ba7644c050aab1",
     password: "fe28d362",
     database: "heroku_f4cca122d17507a"
 });
 
-
 var gcm = require('node-gcm');
 var regTokens = ['eTAhKXGmMyk:APA91bG0vkKehF24-57gEg_jUtNXmSAv0RbYfOdHN1eJxh8Vt0SwvnwGdJ0u0s4vYuha4N36fASZb6cASXmosrrsTWj-R3SpasV2A8zWne-TkhCaPNrqyDqSHqSJEIc0Ck_ySDpcl4SU'];
 
 function processEvent(event) {
-    var sender = event.sender.id.toString();
+  var sender = event.sender.id.toString();
     if (event.message && event.message.text) {
         var text = event.message.text;
         // Handle a text message from this sender
         if (!sessionIds.has(sender)) {
             sessionIds.set(sender, uuid.v1());
-        }
-        console.log("Text", text);
+}
+
+console.log("Text", text);
         let apiaiRequest = apiAiService.textRequest(text, {
-            sessionId: sessionIds.get(sender)
-        });
-        apiaiRequest.on('response', (response) => {
-            if (isDefined(response.result)) {
+  sessionId: sessionIds.get(sender)
+});
+
+apiaiRequest.on('response', (response) => {
+  if (isDefined(response.result)) {
                 let responseText = response.result.fulfillment.speech;
                 let responseData = response.result.fulfillment.data;
                 let action = response.result.action;
@@ -60,13 +62,17 @@ function processEvent(event) {
                     try {
                         console.log('Response as formatted message');
                         sendFBMessage(sender, responseData.facebook);
-                    } catch (err) {
+}
+
+catch (err) {
                         /*sendFBMessage(sender, {
                             text: err.message
                         }); */
-                    }
-                } else if (isDefined(responseText)) {
-                    afterResponseData(action, response, responseText);
+}
+                }
+
+else if (isDefined(responseText)) {
+  afterResponseData(action, response, responseText);
 
                     //console.log("params"+params.RefugeeLocation);
                     if (action === "actionID") {
@@ -81,16 +87,16 @@ function processEvent(event) {
                                     if (err) {
                                         console.log('Error connecting to Db');
                                         return;
-                                    }
+}
 
-                                    con.query('CALL get_organisation1(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
-                                        if (err) {
+con.query('CALL get_organisation1(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+  if (err) {
                                             console.log(err);
-                                        }
-                                        var elements = [];
-                                        if (rows[0].length != 0) {
+}
 
-                                            rows[0].forEach(function(row) {
+var elements = [];
+                                        if (rows[0].length != 0) {
+  rows[0].forEach(function(row) {
                                                 elements.push({
                                                     "title": row.name,
                                                     "subtitle": row.description,
@@ -98,33 +104,41 @@ function processEvent(event) {
                                                         "type": "web_url",
                                                         "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
                                                         "title": row.phone
-                                                    }]
-                                                });
+}
+
+]
+});
                                             });
-                                        } else {
-                                            elements.push({
+                                        }
+
+else {
+elements.push({
                                                 "title": "MEDAIR",
                                                 "subtitle": "Medair helps people who are suffering in remote and devastated communities around the world survive crisis, recover with dignity, and develop skills to build a better future",
                                                 "buttons": [{
                                                     "type": "web_url",
                                                     "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
                                                     "title": "4086685302"
-                                                }]
-                                            });
+}
+
+]
+});
                                         }
 
-                                        var message = {
-                                            "attachment": {
+var message = {
+                                            "attachment"
+: {
                                                 "type": "template",
                                                 "payload": {
                                                     "template_type": "generic",
                                                     "elements": elements
-                                                }
+}
                                             }
                                         };
-                                        sendFBMessage(sender, message);
+
+sendFBMessage(sender, message);
                                         con.end();
-                                    });
+});
 
                                 });
                                 /*con.end(function(err) {
@@ -137,25 +151,26 @@ function processEvent(event) {
 
                         }
                     }
-                    var splittedText = splitResponse(responseText);
+
+var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
-                        sendFBMessage(sender, {
+sendFBMessage(sender, {
                             text: textPart
-                        }, callback);
-                    });
+},callback);
+});
                 }
             }
         });
 
-        apiaiRequest.on('error', (error) => console.error(error));
+apiaiRequest.on('error', (error) => console.error(error));
         apiaiRequest.end();
-    }
+}
 }
 
 exports.afterResponse = afterResponseData;
 
 function afterResponseData(action, response, responseText) {
-    if (action === "actionID") {
+if (action === "actionID") {
         let params = response.result.parameters || "";
         let refugeeID = params.RefugeeID || "";
         let refugeeZipCode = params.RefugeeLocation || "";
@@ -168,7 +183,7 @@ function afterResponseData(action, response, responseText) {
                         console.log(err);
                     }
 
-                    console.log('Data received from Db:\n');
+                    console.log('Data received from Db: \n');
                     console.log(rows);
                 }); */
             /*    con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
@@ -179,7 +194,7 @@ function afterResponseData(action, response, responseText) {
                 }); */
             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                 console.log("I am here");
-                insertDb (id,address,phoneNumber);
+                insertDb (refugeeID,refugeeZipCode,refugeePhone);
                 //    console.log("latitude" +response.latitude);
                 //    console.log("longitude" + response.longitude);
                 var message = new gcm.Message({
@@ -197,6 +212,7 @@ function afterResponseData(action, response, responseText) {
                 new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
                     registrationTokens: regTokens
                 }, function(err, response) {
+                    console.log("sdf");
                     if (err) console.error(err);
                 });
 
@@ -258,31 +274,7 @@ function sendFBMessage(sender, messageData, callback) {
                     id: sender
                 },
                 message: messageData
-                    /*"message": {
-                        "attachment": {
-                            "type": "template",
-                            "payload": {
-                                "template_type": "generic",
-                                "elements": [{
-                                    "title": "Medair",
-                                    "subtitle": "Provides a help to all the refugees",
-                                    "buttons": [{
-                                        "type": "web_url",
-                                        "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
-                                        "title": "4086685302"
-                                    }]
-                                },{
-                                    "title": "Others",
-                                    "subtitle": "Provides food",
-                                    "buttons": [{
-                                        "type": "web_url",
-                                        "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
-                                        "title": "4086685302"
-                                    }]
-                                }]
-                            }
-                        }
-                    } */
+
             }
         },
         function(error, response, body) {
@@ -342,7 +334,6 @@ app.get('/listrefugees', function(req, res) {
             if (err) {
                 console.log(err);
             }
-            console.log(rows);
             res.write(JSON.stringify(rows));
             res.end();
         });
@@ -360,7 +351,6 @@ app.get('/refugee/:id', function(req, res) {
             if (err) {
                 console.log(err);
             }
-            console.log(rows);
             res.write(JSON.stringify(rows));
             res.end();
         });
@@ -378,17 +368,45 @@ app.post('/refugee', function(req, res) {
 });
 
 function insertDb (id,address,phoneNumber) {
-    console.log(id);
+    var http = require('http');
+
+    //The url we want is `www.nodejitsu.com:1337/`
+    var options = {
+      host: 'https://helpbotsite.herokuapp.com',
+      path: '/update',
+     // data: {refugeeID : id,refugeeAddress:address, refugeePhone :phoneNumber },
+      //since we are listening on a custom port, we need to specify it by hand
+      //This is what changes the request to a POST request
+      method: 'POST'
+    };
+
+    callback = function(response) {
+      var str = ''
+      response.on('data', function (chunk) {
+        str += chunk;
+      });
+
+      response.on('end', function () {
+        console.log(str);
+      });
+    }
+
+    var req = http.request(options, callback);
+    //This is the data we are posting, it needs to be a string or a buffer
+    req.write({refugeeID : id,refugeeAddress:address, refugeePhone :phoneNumber });
+    req.end();
+
+
+    var outString = address.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ' ');
     con.connect(function(err) {
         if (err) {
             console.log('Error connecting to Db');
             return;
         }
-        con.query('CALL insert_refugee(' + id + ',"kartik",' + address + ',"95112",' + phoneNumber + ',"25","male","no",37.383411,121.919662)', function(err, rows) {
+        con.query('CALL insert_refugee(' + id + ',"kartik",' + outString + ',"95112",' + phoneNumber + ',"25","male","no",37.383411,121.919662)', function(err, rows) {
             if (err) {
                 console.log(err);
             }
-            console.log(rows);
             //    res.write(JSON.stringify(rows));
             res.end();
         });
