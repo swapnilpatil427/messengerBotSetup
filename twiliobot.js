@@ -65,7 +65,7 @@ module.exports = class TwilioBot {
                     });
 
                 apiaiRequest.on('response', (response) => {
-                    afterResponse.afterResponse(action,response);
+                    afterResponse(action,response);
                 });
 
                 apiaiRequest.on('error', (error) => console.error(error));
