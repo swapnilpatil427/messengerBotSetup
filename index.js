@@ -228,122 +228,123 @@ function sendFBMessage(sender, messageData, callback) {
                         }
                     }
                 }
-            },
-            function(error, response, body) {
-                if (error) {
-                    console.log('Error sending message: ', error);
-                } else if (response.body.error) {
-                    console.log('Error: ', response.body.error);
-                }
-
-                if (callback) {
-                    callback();
-                }
-            });
-    }
-
-    function doSubscribeRequest() {
-        request({
-                method: 'POST',
-                uri: "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=" + FB_PAGE_ACCESS_TOKEN
-            },
-            function(error, response, body) {
-                if (error) {
-                    console.error('Error while subscription: ', error);
-                } else {
-                    console.log('Subscription result: ', response.body);
-                }
-            });
-    }
-
-    function isDefined(obj) {
-        if (typeof obj == 'undefined') {
-            return false;
-        }
-
-        if (!obj) {
-            return false;
-        }
-
-        return obj != null;
-    }
-
-    const app = express();
-    app.use(bodyParser.urlencoded({
-        extended: true
-    }));
-    app.use(bodyParser.text({
-        type: 'application/json'
-    }));
-
-    app.get('/listrefugees', function(req, res) {
-        con.query('CALL read_refugee()', function(err, rows) {
-            if (err) {
-                console.log(err);
             }
-            console.log(rows);
-            res.write(JSON.stringify(rows));
-            res.end();
+        },
+        function(error, response, body) {
+            if (error) {
+                console.log('Error sending message: ', error);
+            } else if (response.body.error) {
+                console.log('Error: ', response.body.error);
+            }
+
+            if (callback) {
+                callback();
+            }
         });
-    });
+}
 
-    app.get('/refugee/:id', function(req, res) {
-        con.query('CALL get_refugee(' + req.params.id + ')', function(err, rows) {
-            if (err) {
-                console.log(err);
+function doSubscribeRequest() {
+    request({
+            method: 'POST',
+            uri: "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=" + FB_PAGE_ACCESS_TOKEN
+        },
+        function(error, response, body) {
+            if (error) {
+                console.error('Error while subscription: ', error);
+            } else {
+                console.log('Subscription result: ', response.body);
             }
-            console.log(rows);
-            res.write(JSON.stringify(rows));
-            res.end();
         });
-    });
+}
 
-    app.post('/sms', (req, res) => {
-        console.log('POST sms received');
-        try {
-            bot.processMessage(req, res);
-        } catch (err) {
-            return res.status(400).send('Error while processing ' + err.message);
+function isDefined(obj) {
+    if (typeof obj == 'undefined') {
+        return false;
+    }
+
+    if (!obj) {
+        return false;
+    }
+
+    return obj != null;
+}
+
+const app = express();
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.text({
+    type: 'application/json'
+}));
+
+app.get('/listrefugees', function(req, res) {
+    con.query('CALL read_refugee()', function(err, rows) {
+        if (err) {
+            console.log(err);
         }
+        console.log(rows);
+        res.write(JSON.stringify(rows));
+        res.end();
     });
+});
 
-
-
-    app.get('/webhook/', function(req, res) {
-        if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
-            res.send(req.query['hub.challenge']);
-
-            setTimeout(function() {
-                doSubscribeRequest();
-            }, 3000);
-        } else {
-            res.send('Error, wrong validation token');
+app.get('/refugee/:id', function(req, res) {
+    con.query('CALL get_refugee(' + req.params.id + ')', function(err, rows) {
+        if (err) {
+            console.log(err);
         }
+        console.log(rows);
+        res.write(JSON.stringify(rows));
+        res.end();
     });
+});
 
-    app.post('/webhook/', function(req, res) {
-        try {
-            var data = JSONbig.parse(req.body);
+app.post('/sms', (req, res) => {
+    console.log('POST sms received');
+    try {
+        bot.processMessage(req, res);
+    } catch (err) {
+        return res.status(400).send('Error while processing ' + err.message);
+    }
+});
 
-            var messaging_events = data.entry[0].messaging;
-            for (var i = 0; i < messaging_events.length; i++) {
-                var event = data.entry[0].messaging[i];
-                processEvent(event);
-            }
-            return res.status(200).json({
-                status: "ok"
-            });
-        } catch (err) {
-            return res.status(400).json({
-                status: "error",
-                error: err
-            });
+
+
+app.get('/webhook/', function(req, res) {
+    if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
+        res.send(req.query['hub.challenge']);
+
+        setTimeout(function() {
+            doSubscribeRequest();
+        }, 3000);
+    } else {
+        res.send('Error, wrong validation token');
+    }
+});
+
+app.post('/webhook/', function(req, res) {
+    try {
+        var data = JSONbig.parse(req.body);
+
+        var messaging_events = data.entry[0].messaging;
+        for (var i = 0; i < messaging_events.length; i++) {
+            var event = data.entry[0].messaging[i];
+            processEvent(event);
         }
+        return res.status(200).json({
+            status: "ok"
+        });
+    } catch (err) {
+        return res.status(400).json({
+            status: "error",
+            error: err
+        });
+    }
 
-    });
+});
 
-    app.listen(REST_PORT, function() {
-        console.log('Rest service ready on port ' + REST_PORT);
-    });
+app.listen(REST_PORT, function() {
+    console.log('Rest service ready on port ' + REST_PORT);
+});
 
-    doSubscribeRequest();
+doSubscribeRequest();
