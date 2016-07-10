@@ -14,8 +14,20 @@ const APIAI_LANG = 'en';
 const FB_VERIFY_TOKEN = "i_need_help_here";
 const FB_PAGE_ACCESS_TOKEN = "EAAZAqQj1VP6wBAOjsswZAQFIBBfCo482jaMG4489l9GsWTMHZBIyKQvXGyhI0vtEj6RsrnpY5ZBHaDAzyyZC5OyYEoyxGTmLmtSZAqm1U73IQ4QqzxnpCHQ95ykB4DlRNEk4Aqof5lWYAMtAcAaH7nmS4R4s4iwglAMNy2oxylkwZDZD";
 
-const apiAiService = apiai(APIAI_ACCESS_TOKEN, {language: APIAI_LANG, requestSource: "fb"});
+const apiAiService = apiai(APIAI_ACCESS_TOKEN, {
+    language: APIAI_LANG,
+    requestSource: "fb"
+});
 const sessionIds = new Map();
+var gcm = require('node-gcm');
+
+
+
+// Set up the sender with you API key, prepare your recipients' registration tokens.
+var sender = new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU');
+var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
+
+
 
 function processEvent(event) {
     var sender = event.sender.id.toString();
@@ -26,10 +38,9 @@ function processEvent(event) {
             sessionIds.set(sender, uuid.v1());
         }
         console.log("Text", text);
-        let apiaiRequest = apiAiService.textRequest(text,
-            {
-                sessionId: sessionIds.get(sender)
-            });
+        let apiaiRequest = apiAiService.textRequest(text, {
+            sessionId: sessionIds.get(sender)
+        });
         apiaiRequest.on('response', (response) => {
             if (isDefined(response.result)) {
                 let responseText = response.result.fulfillment.speech;
@@ -40,23 +51,44 @@ function processEvent(event) {
                         console.log('Response as formatted message');
                         sendFBMessage(sender, responseData.facebook);
                     } catch (err) {
-                        sendFBMessage(sender, {text: err.message });
+                        sendFBMessage(sender, {
+                            text: err.message
+                        });
                     }
                 } else if (isDefined(responseText)) {
-                    if(action === "actionID") {
+                    if (action === "actionID") {
                         let params = response.result.parameters || "";
                         let refugeeID = params.RefugeeID || "";
                         let refugeeZipCode = params.RefugeeLocation || "";
                         let refugeePhone = params.RefugeePhone || "";
-                        if(refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
+                        if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
+                            var message = new gcm.Message({
+                                data: {
+                                    refugeeID: refugeeID,
+                                    refugeeZipCode: refugeeZipCode,
+                                    refugeePhone : refugeePhone
+                                },
+                                notification: {
+                                    title: "New Refugee Found",
+                                    body: "New Refugee found at location." + refugeeZipCode
+                                }
+                            });
+                            sender.send(message, {
+                                registrationTokens: regTokens
+                            }, function(err, response) {
+                                if (err) console.error(err);
+                                else console.log(response);
+                            });
                             console.log(refugeeID + refugeeZipCode + refugeePhone);
                         }
-                        console.log("params"+JSON.stringify(response.result));
+                        console.log("params" + JSON.stringify(response.result));
                     }
                     //console.log("params"+params.RefugeeLocation);
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
-                        sendFBMessage(sender, {text: textPart}, callback);
+                        sendFBMessage(sender, {
+                            text: textPart
+                        }, callback);
                     });
                 }
             }
@@ -68,8 +100,7 @@ function processEvent(event) {
 }
 
 function splitResponse(str) {
-    if (str.length <= 320)
-    {
+    if (str.length <= 320) {
         return [str];
     }
 
@@ -79,31 +110,28 @@ function splitResponse(str) {
 
 }
 
-function chunkString(s, len)
-{
-    var curr = len, prev = 0;
+function chunkString(s, len) {
+    var curr = len,
+        prev = 0;
 
     var output = [];
 
-    while(s[curr]) {
-        if(s[curr++] == ' ') {
-            output.push(s.substring(prev,curr));
+    while (s[curr]) {
+        if (s[curr++] == ' ') {
+            output.push(s.substring(prev, curr));
             prev = curr;
             curr += len;
-        }
-        else
-        {
+        } else {
             var currReverse = curr;
             do {
-                if(s.substring(currReverse - 1, currReverse) == ' ')
-                {
-                    output.push(s.substring(prev,currReverse));
+                if (s.substring(currReverse - 1, currReverse) == ' ') {
+                    output.push(s.substring(prev, currReverse));
                     prev = currReverse;
                     curr = currReverse + len;
                     break;
                 }
                 currReverse--;
-            } while(currReverse > prev)
+            } while (currReverse > prev)
         }
     }
     output.push(s.substr(prev));
@@ -113,13 +141,17 @@ function chunkString(s, len)
 function sendFBMessage(sender, messageData, callback) {
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token: FB_PAGE_ACCESS_TOKEN},
+        qs: {
+            access_token: FB_PAGE_ACCESS_TOKEN
+        },
         method: 'POST',
         json: {
-            recipient: {id: sender},
+            recipient: {
+                id: sender
+            },
             message: messageData
         }
-    }, function (error, response, body) {
+    }, function(error, response, body) {
         if (error) {
             console.log('Error sending message: ', error);
         } else if (response.body.error) {
@@ -137,7 +169,7 @@ function doSubscribeRequest() {
             method: 'POST',
             uri: "https://graph.facebook.com/v2.6/me/subscribed_apps?access_token=" + FB_PAGE_ACCESS_TOKEN
         },
-        function (error, response, body) {
+        function(error, response, body) {
             if (error) {
                 console.error('Error while subscription: ', error);
             } else {
@@ -160,13 +192,15 @@ function isDefined(obj) {
 
 const app = express();
 
-app.use(bodyParser.text({ type: 'application/json' }));
+app.use(bodyParser.text({
+    type: 'application/json'
+}));
 
-app.get('/webhook/', function (req, res) {
+app.get('/webhook/', function(req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
 
-        setTimeout(function () {
+        setTimeout(function() {
             doSubscribeRequest();
         }, 3000);
     } else {
@@ -174,7 +208,7 @@ app.get('/webhook/', function (req, res) {
     }
 });
 
-app.post('/webhook/', function (req, res) {
+app.post('/webhook/', function(req, res) {
     try {
         var data = JSONbig.parse(req.body);
 
@@ -195,7 +229,7 @@ app.post('/webhook/', function (req, res) {
 
 });
 
-app.listen(REST_PORT, function () {
+app.listen(REST_PORT, function() {
     console.log('Rest service ready on port ' + REST_PORT);
 });
 
