@@ -20,7 +20,6 @@ const apiAiService = apiai(APIAI_ACCESS_TOKEN, {
 });
 const sessionIds = new Map();
 var gcm = require('node-gcm');
-var sender = new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU');
 var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
 
 function processEvent(event) {
@@ -68,6 +67,7 @@ function processEvent(event) {
                                     body: "New Refugee found at location." + refugeeZipCode
                                 }
                             });
+                            var sender = new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU');
                             sender.send(message, {
                                 registrationTokens: regTokens
                             }, function(err, response) {
