@@ -317,7 +317,7 @@ app.get('/refugee/:id', function(req, res) {
 app.post('/refugee', function(req, res){
     //console.log()
     //res.write("fd");
-    var id = req.params;
+    var id = req;
     var address = req.params.refugeeAddress;
     var phoneNumber = req.params.refugeePhone;
     console.log(id);
