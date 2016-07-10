@@ -60,7 +60,8 @@ function processEvent(event) {
                                 data: {
                                     refugeeID: refugeeID,
                                     refugeeZipCode: refugeeZipCode,
-                                    refugeePhone : refugeePhone
+                                    refugeePhone : refugeePhone,
+                                    message : "I am here, please find me, i need your help."
                                 },
                                 notification: {
                                     title: "New Refugee Found",
