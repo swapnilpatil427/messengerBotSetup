@@ -112,6 +112,8 @@ function processEvent(event) {
                                     }
                                 }
                             };
+
+                            console.log(JSON.stringify(message));
                             //sendFBMessage(sender, responseData.facebook);
                         });
                     });
