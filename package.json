@@ -20,6 +20,8 @@
     "node-gcm": "^0.14.3",
     "node-geocoder": "^3.12.0",
     "node-uuid": "^1.4.7",
-    "request": "^2.71.0"
+    "request": "^2.71.0",
+    "console-stamp": "^0.2.1",
+    "xml-escape": "^1.1.0"
   }
 }

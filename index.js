@@ -7,6 +7,14 @@ const uuid = require('node-uuid');
 const request = require('request');
 const JSONbig = require('json-bigint');
 const async = require('async');
+const TwilioBot = require('./twiliobot');
+const TwilioBotConfig = require('./twiliobotconfig');
+
+// console timestamps
+require('console-stamp')(console, 'yyyy.mm.dd HH:MM:ss.l');
+
+const botConfig = new TwilioBotConfig(APIAI_ACCESS_TOKEN, APIAI_LANG);
+const bot = new TwilioBot(botConfig);
 var geocoding = require('./geocoding');
 
 const REST_PORT = (process.env.PORT || 5000);
@@ -258,10 +266,27 @@ app.get('/listrefugees', function(req,res) {
 });
 
 app.get('/refugee/:id', function(req,res) {
-    var wiki_entry = req.params.id;
-    res.write(wiki_entry);
-    res.end();
+    con.query('CALL get_refugee('+ req.params.id +')', function(err, rows) {
+        if (err) {
+            console.log(err);
+        }
+        console.log(rows);
+        res.write(JSON.stringify(rows));
+        res.end();
+    });
 });
+
+app.post('/sms', (req, res) => {
+
+    console.log('POST sms received');
+
+    try {
+        bot.processMessage(req, res);
+    } catch (err) {
+        return res.status(400).send('Error while processing ' + err.message);
+    }
+});
+
 
 
 app.get('/webhook/', function(req, res) {
