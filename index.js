@@ -90,62 +90,7 @@ function processEvent(event) {
                         }); */
                     }
                 } else if (isDefined(responseText)) {
-                    if (action === "actionID") {
-                        let params = response.result.parameters || "";
-                        let refugeeID = params.RefugeeID || "";
-                        let refugeeZipCode = params.RefugeeLocation || "";
-                        let refugeePhone = params.RefugeePhone || "";
-                        if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
-                            // Set up the sender with you API key, prepare your recipients' registration tokens.
-
-                            /*    con.query('CALL read_refugee()', function(err, rows) {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-
-                                    console.log('Data received from Db:\n');
-                                    console.log(rows);
-                                }); */
-
-                            geocoding.getAllVolunteers(refugeeZipCode, function(response) {
-                                console.log("I am here");
-                                //    console.log("latitude" +response.latitude);
-                                //    console.log("longitude" + response.longitude);
-                                var message = new gcm.Message({
-                                    data: {
-                                        refugeeID: response.latitude,
-                                        refugeeZipCode: refugeeZipCode,
-                                        refugeePhone: response.longitude,
-                                        message: "I am here, please find me, i need your help."
-                                    },
-                                    notification: {
-                                        title: "New Refugee Found",
-                                        body: "New Refugee found at location." + refugeeZipCode
-                                    }
-                                });
-                                new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
-                                    registrationTokens: regTokens
-                                }, function(err, response) {
-                                    if (err) console.error(err);
-                                    else console.log(response);
-                                });
-                                con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                    console.log(rows);
-                                });
-                            });
-
-                        }
-                    }
-                    //console.log("params"+params.RefugeeLocation);
-                    var splittedText = splitResponse(responseText);
-                    async.eachSeries(splittedText, (textPart, callback) => {
-                        sendFBMessage(sender, {
-                            text: textPart
-                        }, callback);
-                    });
+                    afterResponse(action, response, responseText);
                 }
             }
         });
@@ -153,6 +98,71 @@ function processEvent(event) {
         apiaiRequest.on('error', (error) => console.error(error));
         apiaiRequest.end();
     }
+}
+
+function afterResponse(action, response, responseText) {
+    if (action === "actionID") {
+        let params = response.result.parameters || "";
+        let refugeeID = params.RefugeeID || "";
+        let refugeeZipCode = params.RefugeeLocation || "";
+        let refugeePhone = params.RefugeePhone || "";
+        if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
+            // Set up the sender with you API key, prepare your recipients' registration tokens.
+
+            /*    con.query('CALL read_refugee()', function(err, rows) {
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    console.log('Data received from Db:\n');
+                    console.log(rows);
+                }); */
+            /*    con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    console.log(rows);
+                }); */
+            geocoding.getAllVolunteers(refugeeZipCode, function(response) {
+                console.log("I am here");
+                //    console.log("latitude" +response.latitude);
+                //    console.log("longitude" + response.longitude);
+                var message = new gcm.Message({
+                    data: {
+                        refugeeID: response.latitude,
+                        refugeeZipCode: refugeeZipCode,
+                        refugeePhone: response.longitude,
+                        message: "I am here, please find me, i need your help."
+                    },
+                    notification: {
+                        title: "New Refugee Found",
+                        body: "New Refugee found at location." + refugeeZipCode
+                    }
+                });
+                new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
+                    registrationTokens: regTokens
+                }, function(err, response) {
+                    if (err) console.error(err);
+                    else console.log(response);
+                });
+                con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    console.log(rows);
+                });
+            });
+
+        }
+    }
+    //console.log("params"+params.RefugeeLocation);
+    var splittedText = splitResponse(responseText);
+    async.eachSeries(splittedText, (textPart, callback) => {
+        sendFBMessage(sender, {
+            text: textPart
+        }, callback);
+    });
 }
 
 function splitResponse(str) {
@@ -205,32 +215,32 @@ function sendFBMessage(sender, messageData, callback) {
                 recipient: {
                     id: sender
                 },
-                message :messageData
-                /*"message": {
-                    "attachment": {
-                        "type": "template",
-                        "payload": {
-                            "template_type": "generic",
-                            "elements": [{
-                                "title": "Medair",
-                                "subtitle": "Provides a help to all the refugees",
-                                "buttons": [{
-                                    "type": "web_url",
-                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
-                                    "title": "4086685302"
+                message: messageData
+                    /*"message": {
+                        "attachment": {
+                            "type": "template",
+                            "payload": {
+                                "template_type": "generic",
+                                "elements": [{
+                                    "title": "Medair",
+                                    "subtitle": "Provides a help to all the refugees",
+                                    "buttons": [{
+                                        "type": "web_url",
+                                        "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                        "title": "4086685302"
+                                    }]
+                                },{
+                                    "title": "Others",
+                                    "subtitle": "Provides food",
+                                    "buttons": [{
+                                        "type": "web_url",
+                                        "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                        "title": "4086685302"
+                                    }]
                                 }]
-                            },{
-                                "title": "Others",
-                                "subtitle": "Provides food",
-                                "buttons": [{
-                                    "type": "web_url",
-                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
-                                    "title": "4086685302"
-                                }]
-                            }]
+                            }
                         }
-                    }
-                } */
+                    } */
             }
         },
         function(error, response, body) {
