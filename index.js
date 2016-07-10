@@ -111,7 +111,7 @@ function processEvent(event) {
                                 console.log(rows);
                             }); */
                             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
-                                console.log(response);
+                                console.log("latitude" +response.longitude);
                             });
                             new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
                                 registrationTokens: regTokens

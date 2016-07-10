@@ -69,7 +69,7 @@ var geocoder = NodeGeocoder(options);
 
 // Using callback
 geocoder.geocode('201 S 4th St, San Jose, CA 95112, USA', function(err, res) {
-    console.log(res);
+    console.log(res[0].longitude);
 });
 
 exports.getAllVolunteers = function(address) {
@@ -87,10 +87,10 @@ function getAllNearByOrg (geocode) {
 
 // Or using Promise
 function getGeoCode(address, callback) {
-    geocoder.geocode('201 S 4th St, San Jose, CA 95112, USA')
+    geocoder.geocode(address)
         .then(function(res) {
-            console.log(res);
-            callback(res);
+            console.log("dds");
+            callback(res[0]);
         })
         .catch(function(err) {
             console.log(err);
