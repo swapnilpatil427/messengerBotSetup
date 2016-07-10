@@ -7,6 +7,7 @@ const uuid = require('node-uuid');
 const request = require('request');
 const JSONbig = require('json-bigint');
 const async = require('async');
+var geocoding = require('./geocoding')
 
 const REST_PORT = (process.env.PORT || 5000);
 const APIAI_ACCESS_TOKEN = "aae85be98a3747b2ae00b8f9654e3ab4";
@@ -34,14 +35,7 @@ con.connect(function(err) {
     }
 
     console.log('connected');
-    /* con.query('CALL read_refugee()', function(err, rows) {
-        if (err) {
-            console.log(err);
-        }
 
-        console.log('Data received from Db:\n');
-        console.log(rows);
-    }); */
     return;
     /*con.end(function(err) {
         // The connection is terminated gracefully
@@ -107,6 +101,17 @@ function processEvent(event) {
                                     title: "New Refugee Found",
                                     body: "New Refugee found at location." + refugeeZipCode
                                 }
+                            });
+                        /*    con.query('CALL read_refugee()', function(err, rows) {
+                                if (err) {
+                                    console.log(err);
+                                }
+
+                                console.log('Data received from Db:\n');
+                                console.log(rows);
+                            }); */
+                            geocoding.getAllVolunteers(refugeeZipCode, function(response) {
+                                console.log(response);
                             });
                             new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
                                 registrationTokens: regTokens

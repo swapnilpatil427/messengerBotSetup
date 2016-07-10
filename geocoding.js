@@ -74,7 +74,8 @@ geocoder.geocode('29 champs elysée paris', function(err, res) {
 
 export.getAllVolunteers = function(address) {
     getGeoCode(address, function(response) {
-        notify(response.latitude , response.longitude);
+        return response;
+        //notify(response.latitude , response.longitude);
     });
 }
 
@@ -86,7 +87,7 @@ function getAllNearByOrg (geocode) {
 
 // Or using Promise
 function getGeoCode(address, callback) {
-    geocoder.geocode('29 champs elysée paris')
+    geocoder.geocode(address)
         .then(function(res) {
             console.log(res);
             callback(res);
