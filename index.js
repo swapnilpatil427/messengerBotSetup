@@ -117,6 +117,7 @@ function processEvent(event) {
                             //sendFBMessage(sender, responseData.facebook);
                         });
                     });
+                    sendFBMessage(sender,message);
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {
