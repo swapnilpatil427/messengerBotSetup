@@ -42,6 +42,13 @@ con.connect(function(err) {
     }); */
 });
 
+con.query('CALL read_refugee()',function(err,rows){
+  if (err) throw err;
+
+  console.log('Data received from Db:\n');
+  console.log(rows);
+});
+
 var gcm = require('node-gcm');
 var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
 
