@@ -57,7 +57,23 @@ function processEvent(event) {
                         let refugeePhone = params.RefugeePhone || "";
                         if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
                             // Set up the sender with you API key, prepare your recipients' registration tokens.
-                            
+                            var message = new gcm.Message({
+                                data: {
+                                    refugeeID: refugeeID,
+                                    refugeeZipCode: refugeeZipCode,
+                                    refugeePhone : refugeePhone
+                                },
+                                notification: {
+                                    title: "New Refugee Found",
+                                    body: "New Refugee found at location." + refugeeZipCode
+                                }
+                            });
+                            /* sender.send(message, {
+                                registrationTokens: regTokens
+                            }, function(err, response) {
+                                if (err) console.error(err);
+                                else console.log(response);
+                            }); */
                             console.log(refugeeID + refugeeZipCode + refugeePhone);
                         }
                     }
