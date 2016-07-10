@@ -258,7 +258,8 @@ app.get('/listrefugees', function(req,res) {
 });
 
 app.get('/refugee/:id', function(req,res) {
-    res.write("f");
+    var wiki_entry = req.params.id;
+    res.write(wiki_entry);
     res.end();
 });
 
