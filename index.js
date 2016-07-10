@@ -319,7 +319,7 @@ app.post('/refugee', function(req, res){
     var id = req.params.refugeeID;
     var address = req.params.refugeeAddress;
     var phoneNumber = req.params.refugeePhone;
-    con.query('CALL insert_refugee('+ id + ',"swapnil",' + adress + ',"95112",'+ phoneNumber + ",12,M,NO,127.123,123.123"')', function(err, rows) {
+    con.query('CALL insert_refugee(' + id +',kartik,'+ address +',95112,' +phoneNumber +',25,male,no,37.383411,121.919662)', function(err, rows) {
         if (err) {
             console.log(err);
         }
