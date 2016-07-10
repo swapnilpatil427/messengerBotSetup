@@ -112,7 +112,7 @@ function processEvent(event) {
                                     }
                                 }
                             };
-                            sendFBMessage(sender, responseData.facebook);
+                            //sendFBMessage(sender, responseData.facebook);
                         });
                     });
                     var splittedText = splitResponse(responseText);
