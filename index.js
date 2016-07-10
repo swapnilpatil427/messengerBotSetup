@@ -75,89 +75,85 @@ function processEvent(event) {
         let apiaiRequest = apiAiService.textRequest(text, {
             sessionId: sessionIds.get(sender)
         });
-        apiaiRequests (apiaiRequest);
-    }
-}
-
-exports.apiaiRequests = function (apiaiRequest) {
-    apiaiRequest.on('response', (response) => {
-        if (isDefined(response.result)) {
-            let responseText = response.result.fulfillment.speech;
-            let responseData = response.result.fulfillment.data;
-            let action = response.result.action;
-            if (isDefined(responseData) && isDefined(responseData.facebook)) {
-                try {
-                    console.log('Response as formatted message');
-                    sendFBMessage(sender, responseData.facebook);
-                } catch (err) {
-                    sendFBMessage(sender, {
-                        text: err.message
-                    });
-                }
-            } else if (isDefined(responseText)) {
-                if (action === "actionID") {
-                    let params = response.result.parameters || "";
-                    let refugeeID = params.RefugeeID || "";
-                    let refugeeZipCode = params.RefugeeLocation || "";
-                    let refugeePhone = params.RefugeePhone || "";
-                    if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
-                        // Set up the sender with you API key, prepare your recipients' registration tokens.
-
-                    /*    con.query('CALL read_refugee()', function(err, rows) {
-                            if (err) {
-                                console.log(err);
-                            }
-
-                            console.log('Data received from Db:\n');
-                            console.log(rows);
-                        }); */
-
-                        geocoding.getAllVolunteers(refugeeZipCode, function(response) {
-                            console.log("I am here");
-                        //    console.log("latitude" +response.latitude);
-                        //    console.log("longitude" + response.longitude);
-                        var message = new gcm.Message({
-                            data: {
-                                refugeeID: response.latitude,
-                                refugeeZipCode: refugeeZipCode,
-                                refugeePhone: response.longitude,
-                                message: "I am here, please find me, i need your help."
-                            },
-                            notification: {
-                                title: "New Refugee Found",
-                                body: "New Refugee found at location." + refugeeZipCode
-                            }
+        apiaiRequest.on('response', (response) => {
+            if (isDefined(response.result)) {
+                let responseText = response.result.fulfillment.speech;
+                let responseData = response.result.fulfillment.data;
+                let action = response.result.action;
+                if (isDefined(responseData) && isDefined(responseData.facebook)) {
+                    try {
+                        console.log('Response as formatted message');
+                        sendFBMessage(sender, responseData.facebook);
+                    } catch (err) {
+                        sendFBMessage(sender, {
+                            text: err.message
                         });
-                        new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
-                            registrationTokens: regTokens
-                        }, function(err, response) {
-                            if (err) console.error(err);
-                            else console.log(response);
-                        });
-                            con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
+                    }
+                } else if (isDefined(responseText)) {
+                    if (action === "actionID") {
+                        let params = response.result.parameters || "";
+                        let refugeeID = params.RefugeeID || "";
+                        let refugeeZipCode = params.RefugeeLocation || "";
+                        let refugeePhone = params.RefugeePhone || "";
+                        if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
+                            // Set up the sender with you API key, prepare your recipients' registration tokens.
+
+                        /*    con.query('CALL read_refugee()', function(err, rows) {
                                 if (err) {
                                     console.log(err);
                                 }
+
+                                console.log('Data received from Db:\n');
                                 console.log(rows);
+                            }); */
+
+                            geocoding.getAllVolunteers(refugeeZipCode, function(response) {
+                                console.log("I am here");
+                            //    console.log("latitude" +response.latitude);
+                            //    console.log("longitude" + response.longitude);
+                            var message = new gcm.Message({
+                                data: {
+                                    refugeeID: response.latitude,
+                                    refugeeZipCode: refugeeZipCode,
+                                    refugeePhone: response.longitude,
+                                    message: "I am here, please find me, i need your help."
+                                },
+                                notification: {
+                                    title: "New Refugee Found",
+                                    body: "New Refugee found at location." + refugeeZipCode
+                                }
                             });
-                        });
+                            new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
+                                registrationTokens: regTokens
+                            }, function(err, response) {
+                                if (err) console.error(err);
+                                else console.log(response);
+                            });
+                                con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    console.log(rows);
+                                });
+                            });
 
-                        //console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
+                            //console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
+                        }
                     }
+                    //console.log("params"+params.RefugeeLocation);
+                    var splittedText = splitResponse(responseText);
+                    async.eachSeries(splittedText, (textPart, callback) => {
+                        sendFBMessage(sender, {
+                            text: textPart
+                        }, callback);
+                    });
                 }
-                //console.log("params"+params.RefugeeLocation);
-                var splittedText = splitResponse(responseText);
-                async.eachSeries(splittedText, (textPart, callback) => {
-                    sendFBMessage(sender, {
-                        text: textPart
-                    }, callback);
-                });
             }
-        }
-    });
+        });
 
-    apiaiRequest.on('error', (error) => console.error(error));
-    apiaiRequest.end();
+        apiaiRequest.on('error', (error) => console.error(error));
+        apiaiRequest.end();
+    }
 }
 
 function splitResponse(str) {
