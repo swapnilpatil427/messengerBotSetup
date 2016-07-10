@@ -92,7 +92,7 @@ function processEvent(event) {
                         if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
                             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                                 //console.log(response);
-                                con.query('CALL get_organisation(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+                                con.query('CALL get_organisation1(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
                                     if (err) {
                                         console.log(err);
                                     }
