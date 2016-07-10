@@ -137,7 +137,6 @@ function processEvent(event) {
                                 });
                             });
 
-                            //console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
                         }
                     }
                     //console.log("params"+params.RefugeeLocation);
@@ -206,7 +205,8 @@ function sendFBMessage(sender, messageData, callback) {
                 recipient: {
                     id: sender
                 },
-                "message": {
+                message :messageData
+                /*"message": {
                     "attachment": {
                         "type": "template",
                         "payload": {
@@ -230,7 +230,7 @@ function sendFBMessage(sender, messageData, callback) {
                             }]
                         }
                     }
-                }
+                } */
             }
         },
         function(error, response, body) {
