@@ -33,12 +33,7 @@ var message = new gcm.Message({
         body: "New Refugee found at location."
     }
 });
-sender.send(message, {
-    registrationTokens: regTokens
-}, function(err, response) {
-    if (err) console.error(err);
-    else console.log(response);
-});
+
 function processEvent(event) {
     var sender = event.sender.id.toString();
     if (event.message && event.message.text) {
@@ -193,7 +188,12 @@ app.use(bodyParser.text({
 app.get('/webhook/', function(req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
-
+        sender.send(message, {
+            registrationTokens: regTokens
+        }, function(err, response) {
+            if (err) console.error(err);
+            else console.log(response);
+        });
         setTimeout(function() {
             doSubscribeRequest();
         }, 3000);
