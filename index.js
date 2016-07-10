@@ -128,12 +128,12 @@ function processEvent(event) {
 
                                 });
                                 con.end();
-                                    /*con.end(function(err) {
-                                        // The connection is terminated gracefully
-                                        // Ensures all previously enqueued queries are still
-                                        // before sending a COM_QUIT packet to the MySQL server.
-                                    }); */
-                                });
+                                /*con.end(function(err) {
+                                    // The connection is terminated gracefully
+                                    // Ensures all previously enqueued queries are still
+                                    // before sending a COM_QUIT packet to the MySQL server.
+                                }); */
+                            });
 
 
                         }
@@ -333,24 +333,38 @@ app.use(bodyParser.text({
 }));
 
 app.get('/listrefugees', function(req, res) {
-    con.query('CALL read_refugee()', function(err, rows) {
+    con.connect(function(err) {
         if (err) {
-            console.log(err);
+            console.log('Error connecting to Db');
+            return;
         }
-        console.log(rows);
-        res.write(JSON.stringify(rows));
-        res.end();
+        con.query('CALL read_refugee()', function(err, rows) {
+            if (err) {
+                console.log(err);
+            }
+            console.log(rows);
+            res.write(JSON.stringify(rows));
+            res.end();
+        });
+        con.end();
     });
 });
 
 app.get('/refugee/:id', function(req, res) {
-    con.query('CALL get_refugee(' + req.params.id + ')', function(err, rows) {
+    con.connect(function(err) {
         if (err) {
-            console.log(err);
+            console.log('Error connecting to Db');
+            return;
         }
-        console.log(rows);
-        res.write(JSON.stringify(rows));
-        res.end();
+        con.query('CALL get_refugee(' + req.params.id + ')', function(err, rows) {
+            if (err) {
+                console.log(err);
+            }
+            console.log(rows);
+            res.write(JSON.stringify(rows));
+            res.end();
+        });
+        con.end();
     });
 });
 
@@ -360,16 +374,28 @@ app.post('/refugee', function(req, res) {
     var id = req.body.refugeeID;
     var address = req.body.refugeeAddress;
     var phoneNumber = req.body.refugeePhone;
-    console.log(id);
-    con.query('CALL insert_refugee(' + id + ',"kartik",' + address + ',"95112",' + phoneNumber + ',"25","male","no",37.383411,121.919662)', function(err, rows) {
-        if (err) {
-            console.log(err);
-        }
-        console.log(rows);
-        //    res.write(JSON.stringify(rows));
-        res.end();
-    });
+    insertDb(id,address,phoneNumber);
+
 });
+
+function insertDb (id,address,phoneNumber) {
+    console.log(id);
+    con.connect(function(err) {
+        if (err) {
+            console.log('Error connecting to Db');
+            return;
+        }
+        con.query('CALL insert_refugee(' + id + ',"kartik",' + address + ',"95112",' + phoneNumber + ',"25","male","no",37.383411,121.919662)', function(err, rows) {
+            if (err) {
+                console.log(err);
+            }
+            console.log(rows);
+            //    res.write(JSON.stringify(rows));
+            res.end();
+        });
+        con.end();
+    });
+}
 
 app.post('/sms', (req, res) => {
     console.log('POST sms received');
