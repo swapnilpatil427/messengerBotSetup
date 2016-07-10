@@ -4,6 +4,7 @@ const apiai = require('apiai');
 const uuid = require('node-uuid');
 const request = require('request');
 const xmlescape = require('xml-escape');
+var afterResponse = require('./index');
 
 module.exports = class TwilioBot {
 
@@ -64,20 +65,7 @@ module.exports = class TwilioBot {
                     });
 
                 apiaiRequest.on('response', (response) => {
-                    console.log(response);
-                    if (TwilioBot.isDefined(response.result)) {
-                        let responseText = response.result.fulfillment.speech;
-
-                        if (TwilioBot.isDefined(responseText)) {
-                            console.log('Response as text message');
-                            res.setHeader("Content-Type", "application/xml");
-                            res.status(200).end("<Response><Message>" + xmlescape(responseText) + "</Message></Response>");
-                        } else {
-                            console.log('Received empty speech');
-                        }
-                    } else {
-                        console.log('Received empty result')
-                    }
+                    afterResponse.afterResponse(action,response);
                 });
 
                 apiaiRequest.on('error', (error) => console.error(error));
