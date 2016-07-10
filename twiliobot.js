@@ -4,7 +4,7 @@ const apiai = require('apiai');
 const uuid = require('node-uuid');
 const request = require('request');
 const xmlescape = require('xml-escape');
-var common = requite('./index.js');
+var common = require('./index.js');
 
 module.exports = class TwilioBot {
 
