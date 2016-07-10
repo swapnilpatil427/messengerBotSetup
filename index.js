@@ -317,18 +317,19 @@ app.get('/refugee/:id', function(req, res) {
 app.post('/refugee', function(req, res){
     //console.log()
     //res.write("fd");
-    var id = req.params.refugeeID;
+    var id = req.params;
     var address = req.params.refugeeAddress;
     var phoneNumber = req.params.refugeePhone;
-    console.log(phoneNumber + address);
-    con.query('CALL insert_refugee(' + id +',kartik,'+ address +',95112,' +phoneNumber +',25,male,no,37.383411,121.919662)', function(err, rows) {
+    console.log(id);
+/*    con.query('CALL insert_refugee(' + id +',kartik,'+ address +',95112,' +phoneNumber +',25,male,no,37.383411,121.919662)', function(err, rows) {
         if (err) {
             console.log(err);
         }
         console.log(rows);
     //    res.write(JSON.stringify(rows));
         res.end();
-    });
+    }); */
+    res.end();
 });
 
 app.post('/sms', (req, res) => {
