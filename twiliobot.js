@@ -64,6 +64,7 @@ module.exports = class TwilioBot {
                     });
 
                 apiaiRequest.on('response', (response) => {
+                    console.log(response);
                     if (TwilioBot.isDefined(response.result)) {
                         let responseText = response.result.fulfillment.speech;
 
