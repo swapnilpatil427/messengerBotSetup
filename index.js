@@ -254,9 +254,14 @@ app.get('/listrefugees', function(req,res) {
         console.log(rows);
         res.write(JSON.stringify(rows));
         res.end();
-
     });
-})
+});
+
+app.get('/refugee/:id', function(req,res) {
+    res.write(req.params.id);
+    res.end();
+});
+
 
 app.get('/webhook/', function(req, res) {
     if (req.query['hub.verify_token'] == FB_VERIFY_TOKEN) {
