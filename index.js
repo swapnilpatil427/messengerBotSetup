@@ -123,11 +123,10 @@ function processEvent(event) {
                                             }
                                         };
                                         sendFBMessage(sender, message);
-
+                                        con.end();
                                     });
 
                                 });
-                                con.end();
                                 /*con.end(function(err) {
                                     // The connection is terminated gracefully
                                     // Ensures all previously enqueued queries are still
@@ -375,7 +374,6 @@ app.post('/refugee', function(req, res) {
     var address = req.body.refugeeAddress;
     var phoneNumber = req.body.refugeePhone;
     insertDb(id,address,phoneNumber);
-
 });
 
 function insertDb (id,address,phoneNumber) {
