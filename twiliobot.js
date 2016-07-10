@@ -46,7 +46,7 @@ module.exports = class TwilioBot {
         if (this._botConfig.devConfig) {
             console.log("body", req.body);
         }
-        console.log(JSON.stringify(req));
+        console.log("JSON.stringify(req)");
         if (req.body && req.body.From && req.body.Body) {
             let chatId = req.body.From;
             let messageText = req.body.Body;
