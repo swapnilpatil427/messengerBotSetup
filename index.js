@@ -82,41 +82,47 @@ function processEvent(event) {
                     }
                 } else if (isDefined(responseText)) {
                     afterResponseData(action, response, responseText);
-                    let refugeeZipCode = response.result.parameters.RefugeeLocation || "";
+
                     //console.log("params"+params.RefugeeLocation);
-                    geocoding.getAllVolunteers(refugeeZipCode, function(response) {
-                        //console.log(response);
-                        con.query('CALL get_refugee(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
-                            if (err) {
-                                console.log(err);
-                            }
-                            var elements = [];
-                            rows[0].forEach(function(row) {
-                                elements.push({
-                                    "title": row.name,
-                                    "subtitle": row.address,
-                                    "buttons": [{
-                                        "type": "web_url",
-                                        "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
-                                        "title": row.phone
-                                    }]
-                                });
-                            });
+                    if (action === "actionID") {
+                        let params = response.result.parameters || "";
+                        let refugeeID = params.RefugeeID || "";
+                        let refugeeZipCode = params.RefugeeLocation || "";
+                        let refugeePhone = params.RefugeePhone || "";
+                        if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
+                            geocoding.getAllVolunteers(refugeeZipCode, function(response) {
+                                    //console.log(response);
+                                    con.query('CALL get_refugee(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        var elements = [];
+                                        rows[0].forEach(function(row) {
+                                            elements.push({
+                                                "title": row.name,
+                                                "subtitle": row.address,
+                                                "buttons": [{
+                                                    "type": "web_url",
+                                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                                    "title": row.phone
+                                                }]
+                                            });
+                                        });
 
-                            var message = {
-                                "attachment": {
-                                    "type": "template",
-                                    "payload": {
-                                        "template_type": "generic",
-                                        "elements": elements
-                                    }
+                                        var message = {
+                                            "attachment": {
+                                                "type": "template",
+                                                "payload": {
+                                                    "template_type": "generic",
+                                                    "elements": elements
+                                                }
+                                            }
+                                        };
+                                        sendFBMessage(sender, message);
+                                    });
                                 }
-                            };
-
-                            console.log(JSON.stringify(message));
-                            sendFBMessage(sender,message);
+                            }
                         });
-                    });
 
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
