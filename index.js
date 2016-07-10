@@ -114,10 +114,10 @@ function processEvent(event) {
                             };
 
                             console.log(JSON.stringify(message));
-                            //sendFBMessage(sender, responseData.facebook);
+                            sendFBMessage(sender,message);
                         });
                     });
-                    sendFBMessage(sender,message);
+
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {
