@@ -219,11 +219,16 @@ function sendFBMessage(sender, messageData, callback) {
                             "timestamp": "1428444852",
                             "elements": [{
                                 "title": "Medair ",
-                                "subtitle": "100% Soft and Luxurious Cotton"
-
+                                "subtitle": "100% Soft and Luxurious Cotton",
+                                "quantity": 2,
+                                "price": 50,
+                                "currency": "USD"
                             }, {
                                 "title": "Other Organisation",
-                                "subtitle": "Provides Food"
+                                "subtitle": "Provides Food",
+                                "quantity": 1,
+                                "price": 25,
+                                "currency": "USD"
                             }],
                             "address": {
                                 "street_1": "1 Hacker Way",
@@ -233,19 +238,8 @@ function sendFBMessage(sender, messageData, callback) {
                                 "state": "CA",
                                 "country": "US"
                             },
-                            "summary": {
-                                "subtotal": 75.00,
-                                "shipping_cost": 4.95,
-                                "total_tax": 6.19,
-                                "total_cost": 56.14
-                            },
-                            "adjustments": [{
-                                "name": "New Customer Discount",
-                                "amount": 20
-                            }, {
-                                "name": "$10 Off Coupon",
-                                "amount": 10
-                            }]
+
+                            
                         }
                     }
                 }
