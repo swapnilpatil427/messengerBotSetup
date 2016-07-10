@@ -44,9 +44,9 @@ function processEvent(event) {
                     }
                 } else if (isDefined(responseText)) {
                     if(action === "actionID") {
-                        let params = response.result.parameters;
-                        refugeeID = params.RefugeeID;
-                        refugeeZipCode = params.RefugeeLocation;
+                        //let params = response.result.parameters;
+                        //refugeeID = params.RefugeeID;
+                        //refugeeZipCode = params.RefugeeLocation;
                         console.log("params"+JSON.stringify(response.result));
                     }
                     //console.log("params"+params.RefugeeLocation);
