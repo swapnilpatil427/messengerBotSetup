@@ -314,7 +314,7 @@ app.get('/refugee/:id', function(req, res) {
     });
 });
 
-app.post('/refugee', function(req, res){
+app.get('/refugee', function(req, res){
     //console.log()
     res.write("fd");
     res.end();
