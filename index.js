@@ -98,7 +98,7 @@ function processEvent(event) {
                                     }
                                     var elements = [];
                                     if (rows[0].length != 0) {
-                                        sendFBMessage(sender, "Here's a list of organizations that will help you out. But, in meantime you can contact any of them and they'll be happy to help you.");
+                                        sendFBMessage(sender, "Here's a list of .");
                                         rows[0].forEach(function(row) {
                                             elements.push({
                                                 "title": row.name,
