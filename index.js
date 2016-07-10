@@ -155,7 +155,7 @@ function afterResponseData(action, response, responseText) {
                     else console.log(response);
                 });
                 geocoding.getAllVolunteers(refugeeZipCode, function(response) {
-                    console.log(response);
+                    //console.log(response);
                     con.query('CALL get_refugee('+response.latitude+','+response.longitude+')', function(err, rows) {
                         if (err) {
                             console.log(err);
