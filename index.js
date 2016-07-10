@@ -24,7 +24,7 @@ var con = mysql.createConnection({
     host: "us-cdbr-iron-east-04.cleardb.net",
     user: "ba7644c050aab1",
     password: "fe28d362",
-    database : "heroku_f4cca122d17507a"
+    database: "heroku_f4cca122d17507a"
 });
 
 con.connect(function(err) {
@@ -34,13 +34,13 @@ con.connect(function(err) {
     }
 
     console.log('connected');
-    con.query('CALL read_refugee()',function(err,rows){
-      if (err) {
-          console.log(err);
-      }
+    con.query('CALL read_refugee()', function(err, rows) {
+        if (err) {
+            console.log(err);
+        }
 
-      console.log('Data received from Db:\n');
-      console.log(rows);
+        console.log('Data received from Db:\n');
+        console.log(rows);
     });
     return;
     /*con.end(function(err) {
@@ -48,6 +48,15 @@ con.connect(function(err) {
         // Ensures all previously enqueued queries are still
         // before sending a COM_QUIT packet to the MySQL server.
     }); */
+});
+
+con.query('CALL read_refugee()', function(err, rows) {
+    if (err) {
+        console.log(err);
+    }
+
+    console.log('Data received from Db:\n');
+    console.log(rows);
 });
 
 var gcm = require('node-gcm');
@@ -105,7 +114,7 @@ function processEvent(event) {
                                 if (err) console.error(err);
                                 else console.log(response);
                             });
-                            console.log("sddsd"+ refugeeID + refugeeZipCode + refugeePhone);
+                            console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
                         }
                     }
                     //console.log("params"+params.RefugeeLocation);
