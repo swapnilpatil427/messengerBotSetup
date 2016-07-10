@@ -85,9 +85,9 @@ function processEvent(event) {
                         console.log('Response as formatted message');
                         sendFBMessage(sender, responseData.facebook);
                     } catch (err) {
-                        sendFBMessage(sender, {
+                        /*sendFBMessage(sender, {
                             text: err.message
-                        });
+                        }); */
                     }
                 } else if (isDefined(responseText)) {
                     if (action === "actionID") {
