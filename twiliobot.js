@@ -95,6 +95,7 @@ module.exports = class TwilioBot {
                         if (TwilioBot.isDefined(responseText)) {
                             common.afterResponse(action, response, responseText);
                             //console.log("params"+params.RefugeeLocation);
+                            var elements = "";
                             if (action === "actionID") {
                                 let params = response.result.parameters || "";
                                 let refugeeID = params.RefugeeID || "";
@@ -113,9 +114,7 @@ module.exports = class TwilioBot {
                                                     elements = "Name : " + row.name + "Description :" + row.description + "phoneNumber :" + row.phone + "\n";
                                                 });
                                             }
-
-                                            res.setHeader("Content-Type", "application/xml");
-                                            res.status(200).end("<Response><Message>" + xmlescape(elements) + "</Message></Response>");
+                                            res.status(200).end("<Response><Message>" +  + "</Message></Response>");
                                         });
 
                                     });
@@ -123,7 +122,7 @@ module.exports = class TwilioBot {
                             }
                             console.log('Response as text message');
                             res.setHeader("Content-Type", "application/xml");
-                            res.status(200).end("<Response><Message>" + xmlescape(responseText) + "</Message></Response>");
+                            res.status(200).end("<Response><Message>" + xmlescape(responseText) + "\n" +xmlescape(elements) + "</Message></Response>");
                         } else {
                             console.log('Received empty speech');
                         }
