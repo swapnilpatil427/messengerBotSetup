@@ -312,6 +312,10 @@ app.get('/refugee/:id', function(req, res) {
     });
 });
 
+app.post('/refugee', function(req, res){
+    //console.log()
+});
+
 app.post('/sms', (req, res) => {
     console.log('POST sms received');
     try {
