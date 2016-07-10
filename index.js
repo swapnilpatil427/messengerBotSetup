@@ -215,7 +215,8 @@ function sendFBMessage(sender, messageData, callback) {
                                 "title": "Medair",
                                 "subtitle": "Provides a help to all the refugees",
                                 "buttons": [{
-                                    "type": "phone_number",
+                                    "type": "web_url",
+                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
                                     "title": "4086685302"
                                 }, {
                                     "type": "postback",
