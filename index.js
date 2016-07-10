@@ -44,8 +44,8 @@ function processEvent(event) {
                     }
                 } else if (isDefined(responseText)) {
                     let params = response.result.parameters;
-                    console.log("params"+params.RefugeeID);
-                    console.log("params"+params.RefugeeLocation);
+                    console.log("params"+JSON.stringify(response.result));
+                    //console.log("params"+params.RefugeeLocation);
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {text: textPart}, callback);
