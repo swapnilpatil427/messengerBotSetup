@@ -67,13 +67,7 @@ function notify(message, callback){
 
 var geocoder = NodeGeocoder(options);
 
-// Using callback
-geocoder.geocode('201 S 4th Street, San Jose, California', function(err, res) {
-    console.log(res[0].longitude);
-});
-
 exports.getAllVolunteers = function(address,callback) {
-    console.log("I am here");
      getGeoCode(address, function(response) {
         callback(response);
         //notify(response.latitude , response.longitude);
@@ -88,10 +82,8 @@ function getAllNearByOrg (geocode) {
 
 // Or using Promise
 function getGeoCode(address, callback) {
-    console.log(address);
     geocoder.geocode(address)
         .then(function(res) {
-            
             callback(res[0]);
         })
         .catch(function(err) {

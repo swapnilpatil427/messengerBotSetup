@@ -113,8 +113,14 @@ function processEvent(event) {
 
                             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                                 console.log("I am here");
-                                console.log("latitude" +response.latitude);
-                                console.log("longitude" + response.longitude);
+                            //    console.log("latitude" +response.latitude);
+                            //    console.log("longitude" + response.longitude);
+                                con.query('CALL get_refugee('+response.latitude+','+response.longitude +')', function(err, rows) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    console.log(rows);
+                                });
                             });
                             new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
                                 registrationTokens: regTokens
@@ -122,7 +128,7 @@ function processEvent(event) {
                                 if (err) console.error(err);
                                 else console.log(response);
                             });
-                            console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
+                            //console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
                         }
                     }
                     //console.log("params"+params.RefugeeLocation);
