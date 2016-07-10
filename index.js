@@ -248,7 +248,7 @@ function isDefined(obj) {
 }
 
 const app = express();
-
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.text({
     type: 'application/json'
 }));
@@ -276,9 +276,7 @@ app.get('/refugee/:id', function(req,res) {
 });
 
 app.post('/sms', (req, res) => {
-
     console.log('POST sms received');
-
     try {
         bot.processMessage(req, res);
     } catch (err) {
