@@ -68,7 +68,7 @@ function notify(message, callback){
 var geocoder = NodeGeocoder(options);
 
 // Using callback
-geocoder.geocode('29 champs elysée paris', function(err, res) {
+geocoder.geocode('201 S 4th St, San Jose, CA 95112, USA', function(err, res) {
     console.log(res);
 });
 
@@ -87,7 +87,7 @@ function getAllNearByOrg (geocode) {
 
 // Or using Promise
 function getGeoCode(address, callback) {
-    geocoder.geocode(address)
+    geocoder.geocode('201 S 4th St, San Jose, CA 95112, USA')
         .then(function(res) {
             console.log(res);
             callback(res);
