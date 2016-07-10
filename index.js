@@ -41,14 +41,6 @@ con.connect(function(err) {
         // before sending a COM_QUIT packet to the MySQL server.
     }); */
 });
-con.query(
-    'create table refugee ( ID integer, zipcode integer,phone text, age integer, gender varchar(10),disability varchar(20),latitude varchar(20),longitude varchar(20) )',
-  function (err, result) {
-    if (err) throw err;
-
-    console.log('Changed ' + result.changedRows + ' rows');
-  }
-);
 
 var gcm = require('node-gcm');
 var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
