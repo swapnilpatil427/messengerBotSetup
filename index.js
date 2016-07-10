@@ -47,9 +47,9 @@ function processEvent(event) {
                         let params = response.result.parameters || "";
                         let refugeeID = params.RefugeeID || "";
                         let refugeeZipCode = params.RefugeeLocation || "";
-                        let refugeePhone = params.RefugeeLocation || "";
+                        let refugeePhone = params.RefugeePhone || "";
                         if(refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
-                            console.log("Got all the parameters");
+                            console.log(refugeeID + refugeeZipCode + refugeePhone);
                         }
                         console.log("params"+JSON.stringify(response.result));
                     }
