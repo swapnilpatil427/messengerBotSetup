@@ -88,6 +88,7 @@ module.exports = class TwilioBot {
                                 let refugeeZipCode = params.RefugeeLocation || "";
                                 let refugeePhone = params.RefugeePhone || "";
                                 if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
+
                                     geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                                         //console.log(response);
                                         con.connect(function(err) {
@@ -106,6 +107,8 @@ module.exports = class TwilioBot {
                                                         elements = "Name : " + row.name + "Description :" + row.description + "phoneNumber :" + row.phone;
                                                     });
                                                 }
+
+                                                console.log(elements);
 
                                                 con.end();
 
