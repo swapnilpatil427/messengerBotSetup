@@ -258,7 +258,7 @@ app.get('/listrefugees', function(req,res) {
 });
 
 app.get('/refugee/:id', function(req,res) {
-    res.write(req.params.id);
+    res.write("f");
     res.end();
 });
 
