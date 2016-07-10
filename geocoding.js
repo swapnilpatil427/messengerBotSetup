@@ -78,6 +78,10 @@ export.getAllVolunteers = function(address) {
     });
 }
 
+function getAllNearByOrg (geocode) {
+
+}
+
 
 
 // Or using Promise

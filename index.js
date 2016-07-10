@@ -19,6 +19,29 @@ const apiAiService = apiai(APIAI_ACCESS_TOKEN, {
     requestSource: "fb"
 });
 const sessionIds = new Map();
+var mysql = require("mysql");
+var con = mysql.createConnection({
+    host: "us-cdbr-iron-east-04.cleardb.net",
+    user: "ba7644c050aab1",
+    password: "fe28d362",
+    database : "heroku_f4cca122d17507a"
+});
+
+con.connect(function(err) {
+    if (err) {
+        console.log('Error connecting to Db');
+        return;
+    }
+
+    console.log('connected');
+    return;
+    /*con.end(function(err) {
+        // The connection is terminated gracefully
+        // Ensures all previously enqueued queries are still
+        // before sending a COM_QUIT packet to the MySQL server.
+    }); */
+});
+
 var gcm = require('node-gcm');
 var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
 
@@ -60,8 +83,8 @@ function processEvent(event) {
                                 data: {
                                     refugeeID: refugeeID,
                                     refugeeZipCode: refugeeZipCode,
-                                    refugeePhone : refugeePhone,
-                                    message : "I am here, please find me, i need your help."
+                                    refugeePhone: refugeePhone,
+                                    message: "I am here, please find me, i need your help."
                                 },
                                 notification: {
                                     title: "New Refugee Found",
