@@ -114,7 +114,7 @@ module.exports = class TwilioBot {
                                                     elements = "Name : " + row.name + "Description :" + row.description + "phoneNumber :" + row.phone + "\n";
                                                 });
                                             }
-                                            
+
                                         });
 
                                     });
@@ -122,7 +122,7 @@ module.exports = class TwilioBot {
                             }
                             console.log('Response as text message');
                             res.setHeader("Content-Type", "application/xml");
-                            res.status(200).end("<Response><Message>" + xmlescape(responseText) + "\n" +xmlescape(elements) + "</Message></Response>");
+                            res.status(200).end("<Response><Message>" + xmlescape(responseText)+  "</Message></Response>");
                         } else {
                             console.log('Received empty speech');
                         }
