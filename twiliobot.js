@@ -121,7 +121,7 @@ module.exports = class TwilioBot {
                             }
                             console.log('Response as text message');
                             res.setHeader("Content-Type", "application/xml");
-                            res.status(200).end("<Response><Message>" + xmlescape(responseText)+  "</Message></Response>");
+                            res.status(200).end("<Response><Message>" + xmlescape(responseText)+ xmlescape(elements) + "</Message></Response>");
                         } else {
                             console.log('Received empty speech');
                         }
