@@ -317,9 +317,9 @@ app.get('/refugee/:id', function(req, res) {
 app.post('/refugee', function(req, res){
     //console.log()
     //res.write("fd");
-    var id = req;
-    var address = req.params.refugeeAddress;
-    var phoneNumber = req.params.refugeePhone;
+    var id = req.body.refugeeID;
+    var address = req.body.refugeeAddress;
+    var phoneNumber = req.body.refugeePhone;
     console.log(id);
 /*    con.query('CALL insert_refugee(' + id +',kartik,'+ address +',95112,' +phoneNumber +',25,male,no,37.383411,121.919662)', function(err, rows) {
         if (err) {
