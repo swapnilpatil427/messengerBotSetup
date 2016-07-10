@@ -12,9 +12,6 @@ const TwilioBotConfig = require('./twiliobotconfig');
 
 // console timestamps
 require('console-stamp')(console, 'yyyy.mm.dd HH:MM:ss.l');
-
-const botConfig = new TwilioBotConfig(APIAI_ACCESS_TOKEN, APIAI_LANG);
-const bot = new TwilioBot(botConfig);
 var geocoding = require('./geocoding');
 
 const REST_PORT = (process.env.PORT || 5000);
@@ -27,6 +24,8 @@ const apiAiService = apiai(APIAI_ACCESS_TOKEN, {
     language: APIAI_LANG,
     requestSource: "fb"
 });
+const botConfig = new TwilioBotConfig(APIAI_ACCESS_TOKEN, APIAI_LANG);
+const bot = new TwilioBot(botConfig);
 const sessionIds = new Map();
 var mysql = require("mysql");
 var con = mysql.createConnection({
