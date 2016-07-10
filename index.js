@@ -35,21 +35,6 @@ var con = mysql.createConnection({
     database: "heroku_f4cca122d17507a"
 });
 
-con.connect(function(err) {
-    if (err) {
-        console.log('Error connecting to Db');
-        return;
-    }
-
-    console.log('connected');
-
-    return;
-    /*con.end(function(err) {
-        // The connection is terminated gracefully
-        // Ensures all previously enqueued queries are still
-        // before sending a COM_QUIT packet to the MySQL server.
-    }); */
-});
 
 var gcm = require('node-gcm');
 var regTokens = ['eTAhKXGmMyk:APA91bG0vkKehF24-57gEg_jUtNXmSAv0RbYfOdHN1eJxh8Vt0SwvnwGdJ0u0s4vYuha4N36fASZb6cASXmosrrsTWj-R3SpasV2A8zWne-TkhCaPNrqyDqSHqSJEIc0Ck_ySDpcl4SU'];
@@ -92,50 +77,65 @@ function processEvent(event) {
                         if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
                             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                                 //console.log(response);
-                                con.query('CALL get_organisation1(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+                                con.connect(function(err) {
                                     if (err) {
-                                        console.log(err);
+                                        console.log('Error connecting to Db');
+                                        return;
                                     }
-                                    var elements = [];
-                                    if (rows[0].length != 0) {
 
-                                        rows[0].forEach(function(row) {
+                                    con.query('CALL get_organisation1(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        var elements = [];
+                                        if (rows[0].length != 0) {
+
+                                            rows[0].forEach(function(row) {
+                                                elements.push({
+                                                    "title": row.name,
+                                                    "subtitle": row.description,
+                                                    "buttons": [{
+                                                        "type": "web_url",
+                                                        "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                                        "title": row.phone
+                                                    }]
+                                                });
+                                            });
+                                        } else {
                                             elements.push({
-                                                "title": row.name,
-                                                "subtitle": row.description,
+                                                "title": "MEDAIR",
+                                                "subtitle": "Medair helps people who are suffering in remote and devastated communities around the world survive crisis, recover with dignity, and develop skills to build a better future",
                                                 "buttons": [{
                                                     "type": "web_url",
                                                     "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
-                                                    "title": row.phone
+                                                    "title": "4086685302"
                                                 }]
                                             });
-                                        });
-                                    } else {
-                                        elements.push({
-                                            "title": "MEDAIR",
-                                            "subtitle": "Medair helps people who are suffering in remote and devastated communities around the world survive crisis, recover with dignity, and develop skills to build a better future",
-                                            "buttons": [{
-                                                "type": "web_url",
-                                                "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
-                                                "title": "4086685302"
-                                            }]
-                                        });
-                                    }
-
-                                    var message = {
-                                        "attachment": {
-                                            "type": "template",
-                                            "payload": {
-                                                "template_type": "generic",
-                                                "elements": elements
-                                            }
                                         }
-                                    };
-                                    sendFBMessage(sender, message);
+
+                                        var message = {
+                                            "attachment": {
+                                                "type": "template",
+                                                "payload": {
+                                                    "template_type": "generic",
+                                                    "elements": elements
+                                                }
+                                            }
+                                        };
+                                        sendFBMessage(sender, message);
+
+                                    });
 
                                 });
+                                con.end();
+                                    /*con.end(function(err) {
+                                        // The connection is terminated gracefully
+                                        // Ensures all previously enqueued queries are still
+                                        // before sending a COM_QUIT packet to the MySQL server.
+                                    }); */
+                                });
 
-                            });
+
                         }
                     }
                     var splittedText = splitResponse(responseText);
@@ -198,7 +198,6 @@ function afterResponseData(action, response, responseText) {
                     registrationTokens: regTokens
                 }, function(err, response) {
                     if (err) console.error(err);
-                    else console.log(response);
                 });
 
 
