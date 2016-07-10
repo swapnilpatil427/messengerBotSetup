@@ -90,7 +90,14 @@ function processEvent(event) {
                         }); */
                     }
                 } else if (isDefined(responseText)) {
-                    afterResponse(action, response, responseText, sender);
+                    afterResponse(action, response, responseText);
+                    //console.log("params"+params.RefugeeLocation);
+                    var splittedText = splitResponse(responseText);
+                    async.eachSeries(splittedText, (textPart, callback) => {
+                        sendFBMessage(sender, {
+                            text: textPart
+                        }, callback);
+                    });
                 }
             }
         });
@@ -100,7 +107,9 @@ function processEvent(event) {
     }
 }
 
-function afterResponse(action, response, responseText, sender) {
+exports.afterResponse = afterResponseData;
+
+function afterResponseData(action, response, responseText) {
     if (action === "actionID") {
         let params = response.result.parameters || "";
         let refugeeID = params.RefugeeID || "";
@@ -156,13 +165,6 @@ function afterResponse(action, response, responseText, sender) {
 
         }
     }
-    //console.log("params"+params.RefugeeLocation);
-    var splittedText = splitResponse(responseText);
-    async.eachSeries(splittedText, (textPart, callback) => {
-        sendFBMessage(sender, {
-            text: textPart
-        }, callback);
-    });
 }
 
 function splitResponse(str) {

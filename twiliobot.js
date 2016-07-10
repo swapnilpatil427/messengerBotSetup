@@ -4,6 +4,7 @@ const apiai = require('apiai');
 const uuid = require('node-uuid');
 const request = require('request');
 const xmlescape = require('xml-escape');
+var common = requite('./index.js');
 
 module.exports = class TwilioBot {
 
@@ -67,8 +68,9 @@ module.exports = class TwilioBot {
                     console.log(response);
                     if (TwilioBot.isDefined(response.result)) {
                         let responseText = response.result.fulfillment.speech;
-
+                        let action = response.result.action;
                         if (TwilioBot.isDefined(responseText)) {
+                            common.afterResponse(action, response, responseText)
                             console.log('Response as text message');
                             res.setHeader("Content-Type", "application/xml");
                             res.status(200).end("<Response><Message>" + xmlescape(responseText) + "</Message></Response>");
