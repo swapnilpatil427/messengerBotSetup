@@ -34,14 +34,14 @@ con.connect(function(err) {
     }
 
     console.log('connected');
-    con.query('CALL read_refugee()', function(err, rows) {
+    /* con.query('CALL read_refugee()', function(err, rows) {
         if (err) {
             console.log(err);
         }
 
         console.log('Data received from Db:\n');
         console.log(rows);
-    });
+    }); */
     return;
     /*con.end(function(err) {
         // The connection is terminated gracefully
