@@ -218,14 +218,15 @@ function sendFBMessage(sender, messageData, callback) {
                                     "type": "web_url",
                                     "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
                                     "title": "4086685302"
-                                },{
-                                    "title": "Medair",
-                                    "subtitle": "Provides a help to all the refugees",
-                                    "buttons": [{
-                                        "type": "web_url",
-                                        "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
-                                        "title": "4086685302"
-                                    }]
+                                }]
+                            },{
+                                "title": "Others",
+                                "subtitle": "Provides food",
+                                "buttons": [{
+                                    "type": "web_url",
+                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                    "title": "4086685302"
+                                }]
                             }]
                         }
                     }
