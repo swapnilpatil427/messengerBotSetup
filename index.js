@@ -219,14 +219,14 @@ function sendFBMessage(sender, messageData, callback) {
                             "timestamp": "1428444852",
                             "elements": [{
                                 "title": "Medair",
-                                "subtitle": "Provides help to refugee",
-                                "Contact": 4083454545,
-                                "distance": 50,
+                                "subtitle": "100% Soft and Luxurious Cotton",
+                                "quantity": 2,
+                                "price": 50,
                                 "currency": "USD"
                             }, {
-                                "title": "Other Organisation",
-                                "subtitle": "Provides Food",
-                                "Contact": 123455567,
+                                "title": "Classic Gray T-Shirt",
+                                "subtitle": "100% Soft and Luxurious Cotton",
+                                "quantity": 1,
                                 "price": 25,
                                 "currency": "USD"
                             }],
@@ -237,20 +237,7 @@ function sendFBMessage(sender, messageData, callback) {
                                 "postal_code": "94025",
                                 "state": "CA",
                                 "country": "US"
-                            },
-                            "summary": {
-                                "subtotal": 75.00,
-                                "shipping_cost": 4.95,
-                                "total_tax": 6.19,
-                                "total_cost": 56.14
-                            },
-                            "adjustments": [{
-                                "name": "New Customer Discount",
-                                "amount": 20
-                            }, {
-                                "name": "$10 Off Coupon",
-                                "amount": 10
-                            }]
+                            }
                         }
                     }
                 }
