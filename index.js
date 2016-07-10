@@ -20,7 +20,25 @@ const apiAiService = apiai(APIAI_ACCESS_TOKEN, {
 });
 const sessionIds = new Map();
 var gcm = require('node-gcm');
-
+var sender = new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU');
+var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
+var message = new gcm.Message({
+    data: {
+        refugeeID: '001',
+        refugeeZipCode: '95112',
+        refugeePhone : '12341234'
+    },
+    notification: {
+        title: "New Refugee Found",
+        body: "New Refugee found at location."
+    }
+});
+sender.send(message, {
+    registrationTokens: regTokens
+}, function(err, response) {
+    if (err) console.error(err);
+    else console.log(response);
+});
 function processEvent(event) {
     var sender = event.sender.id.toString();
     if (event.message && event.message.text) {
@@ -55,25 +73,7 @@ function processEvent(event) {
                         let refugeePhone = params.RefugeePhone || "";
                         if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
                             // Set up the sender with you API key, prepare your recipients' registration tokens.
-                            var sender = new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU');
-                            var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
-                            var message = new gcm.Message({
-                                data: {
-                                    refugeeID: refugeeID,
-                                    refugeeZipCode: refugeeZipCode,
-                                    refugeePhone : refugeePhone
-                                },
-                                notification: {
-                                    title: "New Refugee Found",
-                                    body: "New Refugee found at location." + refugeeZipCode
-                                }
-                            });
-                            sender.send(message, {
-                                registrationTokens: regTokens
-                            }, function(err, response) {
-                                if (err) console.error(err);
-                                else console.log(response);
-                            });
+
                             console.log(refugeeID + refugeeZipCode + refugeePhone);
                         }
                     }
