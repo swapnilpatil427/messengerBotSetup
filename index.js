@@ -90,7 +90,7 @@ function processEvent(event) {
                         }); */
                     }
                 } else if (isDefined(responseText)) {
-                    afterResponse(action, response, responseText);
+                    afterResponse(action, response, responseText, sender);
                 }
             }
         });
@@ -100,7 +100,7 @@ function processEvent(event) {
     }
 }
 
-function afterResponse(action, response, responseText) {
+function afterResponse(action, response, responseText, sender) {
     if (action === "actionID") {
         let params = response.result.parameters || "";
         let refugeeID = params.RefugeeID || "";
