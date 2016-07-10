@@ -91,7 +91,7 @@ function getGeoCode(address, callback) {
     console.log(address);
     geocoder.geocode(address)
         .then(function(res) {
-            console.log("I am here");
+            
             callback(res[0]);
         })
         .catch(function(err) {

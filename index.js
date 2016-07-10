@@ -112,6 +112,7 @@ function processEvent(event) {
                             }); */
 
                             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
+                                console.log("I am here");
                                 console.log("latitude" +response.latitude);
                                 console.log("longitude" + response.longitude);
                             });
