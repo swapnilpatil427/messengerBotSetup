@@ -91,12 +91,14 @@ function processEvent(event) {
                         let refugeePhone = params.RefugeePhone || "";
                         if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
                             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
-                                    //console.log(response);
-                                    con.query('CALL get_refugee(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
-                                        if (err) {
-                                            console.log(err);
-                                        }
-                                        var elements = [];
+                                //console.log(response);
+                                con.query('CALL get_refugee(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    var elements = [];
+                                    if (rows[0].length != 0) {
+                                        sendFBMessage(sender, "Here's a list of organizations that will help you out. But, in meantime you can contact any of them and they'll be happy to help you.");
                                         rows[0].forEach(function(row) {
                                             elements.push({
                                                 "title": row.name,
@@ -118,13 +120,13 @@ function processEvent(event) {
                                                 }
                                             }
                                         };
-                                        sendFBMessage(sender,"Here's a list of organizations that will help you out. But, in meantime you can contact any of them and they'll be happy to help you.");
                                         sendFBMessage(sender, message);
-                                    });
+                                    }
+                                });
 
-                        });
+                            });
+                        }
                     }
-                }
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
                         sendFBMessage(sender, {
