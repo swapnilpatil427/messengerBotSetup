@@ -92,7 +92,7 @@ function processEvent(event) {
                         if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
                             geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                                 //console.log(response);
-                                con.query('CALL get_refugee(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+                                con.query('CALL get_organisation(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
                                     if (err) {
                                         console.log(err);
                                     }
@@ -102,7 +102,7 @@ function processEvent(event) {
                                         rows[0].forEach(function(row) {
                                             elements.push({
                                                 "title": row.name,
-                                                "subtitle": row.address,
+                                                "subtitle": row.description,
                                                 "buttons": [{
                                                     "type": "web_url",
                                                     "url": "https://petersapparel.parseapp.com/view_item?item_id=100",

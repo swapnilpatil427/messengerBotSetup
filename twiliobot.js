@@ -5,6 +5,30 @@ const uuid = require('node-uuid');
 const request = require('request');
 const xmlescape = require('xml-escape');
 var common = require('./index.js');
+var geocoding = require('./geocoding');
+var mysql = require("mysql");
+var con = mysql.createConnection({
+    host: "us-cdbr-iron-east-04.cleardb.net",
+    user: "ba7644c050aab1",
+    password: "fe28d362",
+    database: "heroku_f4cca122d17507a"
+});
+
+con.connect(function(err) {
+    if (err) {
+        console.log('Error connecting to Db');
+        return;
+    }
+
+    console.log('connected');
+
+    return;
+    /*con.end(function(err) {
+        // The connection is terminated gracefully
+        // Ensures all previously enqueued queries are still
+        // before sending a COM_QUIT packet to the MySQL server.
+    }); */
+});
 
 module.exports = class TwilioBot {
 
@@ -59,10 +83,9 @@ module.exports = class TwilioBot {
                     this._sessionIds.set(chatId, uuid.v1());
                 }
 
-                let apiaiRequest = this._apiaiService.textRequest(messageText,
-                    {
-                        sessionId: this._sessionIds.get(chatId)
-                    });
+                let apiaiRequest = this._apiaiService.textRequest(messageText, {
+                    sessionId: this._sessionIds.get(chatId)
+                });
 
                 apiaiRequest.on('response', (response) => {
                     console.log(response);
@@ -71,6 +94,33 @@ module.exports = class TwilioBot {
                         let action = response.result.action;
                         if (TwilioBot.isDefined(responseText)) {
                             common.afterResponse(action, response, responseText);
+                            //console.log("params"+params.RefugeeLocation);
+                            if (action === "actionID") {
+                                let params = response.result.parameters || "";
+                                let refugeeID = params.RefugeeID || "";
+                                let refugeeZipCode = params.RefugeeLocation || "";
+                                let refugeePhone = params.RefugeePhone || "";
+                                if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
+                                    geocoding.getAllVolunteers(refugeeZipCode, function(response) {
+                                        //console.log(response);
+                                        con.query('CALL get_refugee(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+                                            if (err) {
+                                                console.log(err);
+                                            }
+                                            var elements = "";
+                                            if (rows[0].length != 0) {
+                                                rows[0].forEach(function(row) {
+                                                    elements = "Name : " + row.name + "Description :" + row.description + "phoneNumber :" + row.phone + "\n";
+                                                });
+                                            }
+
+                                            res.setHeader("Content-Type", "application/xml");
+                                            res.status(200).end("<Response><Message>" + xmlescape(elements) + "</Message></Response>");
+                                        });
+
+                                    });
+                                }
+                            }
                             console.log('Response as text message');
                             res.setHeader("Content-Type", "application/xml");
                             res.status(200).end("<Response><Message>" + xmlescape(responseText) + "</Message></Response>");
@@ -84,8 +134,7 @@ module.exports = class TwilioBot {
 
                 apiaiRequest.on('error', (error) => console.error(error));
                 apiaiRequest.end();
-            }
-            else {
+            } else {
                 console.log('Empty message');
                 return res.status(400).end('Empty message');
             }
