@@ -316,7 +316,7 @@ app.get('/refugee/:id', function(req, res) {
 
 app.get('/refugee', function(req, res){
     //console.log()
-    res.write("fd");
+    //res.write("fd");
     res.end();
     /*var id = req.params.refugeeID;
     var address = req.params.refugeeAddress;
