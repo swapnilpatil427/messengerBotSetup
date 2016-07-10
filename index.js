@@ -161,7 +161,7 @@ function afterResponseData(action, response, responseText) {
                             console.log(err);
                         }
 
-                        console.log(JSON.stringify(rows));
+                        console.log(JSON.stringify(rows[0][0]));
                     });
                 });
 
