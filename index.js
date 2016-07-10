@@ -118,7 +118,7 @@ function processEvent(event) {
                                 registrationTokens: regTokens
                             }, function(err, response) {
                                 if (err) console.error(err);
-                                else console.log(response[0].latitude);
+                                else console.log(response);
                             });
                             console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
                         }
