@@ -316,7 +316,9 @@ app.get('/refugee/:id', function(req, res) {
 
 app.post('/refugee', function(req, res){
     //console.log()
-    var id = req.params.refugeeID;
+    res.write("fd");
+    res.end();
+    /*var id = req.params.refugeeID;
     var address = req.params.refugeeAddress;
     var phoneNumber = req.params.refugeePhone;
     con.query('CALL insert_refugee(' + id +',kartik,'+ address +',95112,' +phoneNumber +',25,male,no,37.383411,121.919662)', function(err, rows) {
@@ -326,7 +328,7 @@ app.post('/refugee', function(req, res){
         console.log(rows);
         res.write(JSON.stringify(rows));
         res.end();
-    });
+    }); */
 });
 
 app.post('/sms', (req, res) => {
