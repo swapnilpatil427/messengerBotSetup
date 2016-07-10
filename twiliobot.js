@@ -63,7 +63,7 @@ module.exports = class TwilioBot {
                     sessionId: this._sessionIds.get(chatId)
                 });
 
-                apiaiRequests();
+                apiaiRequests(apiaiRequest);
             } else {
                 console.log('Empty message');
                 return res.status(400).end('Empty message');

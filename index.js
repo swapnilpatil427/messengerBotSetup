@@ -75,11 +75,11 @@ function processEvent(event) {
         let apiaiRequest = apiAiService.textRequest(text, {
             sessionId: sessionIds.get(sender)
         });
-        apiaiRequests (apiaiRequest,sessionId);
+        apiaiRequests (apiaiRequest);
     }
 }
 
-exports.apiaiRequests = function (apiaiRequest,sessionId) {
+exports.apiaiRequests = function (apiaiRequest) {
     apiaiRequest.on('response', (response) => {
         if (isDefined(response.result)) {
             let responseText = response.result.fulfillment.speech;
