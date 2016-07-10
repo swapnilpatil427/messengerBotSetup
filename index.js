@@ -321,15 +321,14 @@ app.post('/refugee', function(req, res){
     var address = req.body.refugeeAddress;
     var phoneNumber = req.body.refugeePhone;
     console.log(id);
-/*    con.query('CALL insert_refugee(' + id +',kartik,'+ address +',95112,' +phoneNumber +',25,male,no,37.383411,121.919662)', function(err, rows) {
+   con.query('CALL insert_refugee(' + id +',kartik,'+ address +',95112,' +phoneNumber +',25,male,no,37.383411,121.919662)', function(err, rows) {
         if (err) {
             console.log(err);
         }
         console.log(rows);
     //    res.write(JSON.stringify(rows));
         res.end();
-    }); */
-    res.end();
+    });
 });
 
 app.post('/sms', (req, res) => {
