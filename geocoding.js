@@ -68,7 +68,7 @@ function notify(message, callback){
 var geocoder = NodeGeocoder(options);
 
 // Using callback
-geocoder.geocode('201 S 4th St, San Jose, CA 95112, USA', function(err, res) {
+geocoder.geocode('201 S 4th Street, San Jose, California', function(err, res) {
     console.log(res[0].longitude);
 });
 

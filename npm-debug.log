@@ -7,7 +7,7 @@
 6 silly lifecycle api-ai-facebook@1.0.0~prestart: no script for prestart, continuing
 7 info lifecycle api-ai-facebook@1.0.0~start: api-ai-facebook@1.0.0
 8 verbose lifecycle api-ai-facebook@1.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle api-ai-facebook@1.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/spatil5/Documents/OpportunityHacks2016/messengerBotSetup/node_modules/.bin:/usr/local/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+9 verbose lifecycle api-ai-facebook@1.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/spatil5/Documents/OpportunityHacks2016/messengerBotSetup/node_modules/.bin:/usr/local/bin:/Library/Frameworks/Python.framework/Versions/3.5/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 10 verbose lifecycle api-ai-facebook@1.0.0~start: CWD: /Users/spatil5/Documents/OpportunityHacks2016/messengerBotSetup
 11 silly lifecycle api-ai-facebook@1.0.0~start: Args: [ '-c', 'node index.js' ]
 12 silly lifecycle api-ai-facebook@1.0.0~start: Returned: code: 1  signal: null
