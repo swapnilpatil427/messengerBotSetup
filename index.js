@@ -154,13 +154,17 @@ function afterResponseData(action, response, responseText) {
                     if (err) console.error(err);
                     else console.log(response);
                 });
-                con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
-                    if (err) {
-                        console.log(err);
-                    }
+                geocoding.getGeoCode(refugeeZipCode, function(response) {
+                    console.log(response);
+                    /*con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
+                        if (err) {
+                            console.log(err);
+                        }
 
-                    console.log(rows);
+                        console.log(rows);
+                    }); */
                 });
+
             });
 
         }
