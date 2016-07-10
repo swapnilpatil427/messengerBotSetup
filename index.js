@@ -161,7 +161,7 @@ function afterResponseData(action, response, responseText) {
                             console.log(err);
                         }
 
-                        console.log(rows.RowDataPacket[0]);
+                        console.log(rows.RowDataPacket[0].name);
                     });
                 });
 
