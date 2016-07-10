@@ -98,7 +98,7 @@ function processEvent(event) {
                                     }
                                     var elements = [];
                                     if (rows[0].length != 0) {
-                                        sendFBMessage(sender, "Here's a list of .");
+
                                         rows[0].forEach(function(row) {
                                             elements.push({
                                                 "title": row.name,
@@ -110,18 +110,29 @@ function processEvent(event) {
                                                 }]
                                             });
                                         });
-
-                                        var message = {
-                                            "attachment": {
-                                                "type": "template",
-                                                "payload": {
-                                                    "template_type": "generic",
-                                                    "elements": elements
-                                                }
-                                            }
-                                        };
-                                        sendFBMessage(sender, message);
+                                    } else {
+                                        elements.push({
+                                            "title": "MEDAIR",
+                                            "subtitle": "Medair helps people who are suffering in remote and devastated communities around the world survive crisis, recover with dignity, and develop skills to build a better future",
+                                            "buttons": [{
+                                                "type": "web_url",
+                                                "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
+                                                "title": "4086685302"
+                                            }]
+                                        });
                                     }
+
+                                    var message = {
+                                        "attachment": {
+                                            "type": "template",
+                                            "payload": {
+                                                "template_type": "generic",
+                                                "elements": elements
+                                            }
+                                        }
+                                    };
+                                    sendFBMessage(sender, message);
+
                                 });
 
                             });
