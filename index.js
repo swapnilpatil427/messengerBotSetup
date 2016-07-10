@@ -86,12 +86,12 @@ function processEvent(event) {
                     //console.log("params"+params.RefugeeLocation);
                     geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                         //console.log(response);
-                        con.query('CALL get_refugee('+response.latitude+','+response.longitude+')', function(err, rows) {
+                        con.query('CALL get_refugee(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
                             if (err) {
                                 console.log(err);
                             }
                             var elements = [];
-                            foreach(row in rows[0]) {
+                            rows[0].forEach(function(row) {
                                 elements.push({
                                     "title": row.name,
                                     "subtitle": row.address,
@@ -101,14 +101,14 @@ function processEvent(event) {
                                         "title": row.phone
                                     }]
                                 });
-                            }
-                            //console.log(JSON.stringify(rows[0][0]));
+                            });
+
                             var message = {
                                 "attachment": {
                                     "type": "template",
                                     "payload": {
                                         "template_type": "generic",
-                                        "elements": elements;
+                                        "elements": elements
                                     }
                                 }
                             };
@@ -132,7 +132,7 @@ function processEvent(event) {
 
 exports.afterResponse = afterResponseData;
 
-function afterResponseData(action, response, responseText,sender) {
+function afterResponseData(action, response, responseText, sender) {
     if (action === "actionID") {
         let params = response.result.parameters || "";
         let refugeeID = params.RefugeeID || "";
@@ -332,19 +332,19 @@ app.get('/refugee/:id', function(req, res) {
     });
 });
 
-app.post('/refugee', function(req, res){
+app.post('/refugee', function(req, res) {
     //console.log()
     //res.write("fd");
     var id = req.body.refugeeID;
     var address = req.body.refugeeAddress;
     var phoneNumber = req.body.refugeePhone;
     console.log(id);
-   con.query('CALL insert_refugee(' + id +',"kartik",'+ address +',"95112",' +phoneNumber +',"25","male","no",37.383411,121.919662)', function(err, rows) {
+    con.query('CALL insert_refugee(' + id + ',"kartik",' + address + ',"95112",' + phoneNumber + ',"25","male","no",37.383411,121.919662)', function(err, rows) {
         if (err) {
             console.log(err);
         }
         console.log(rows);
-    //    res.write(JSON.stringify(rows));
+        //    res.write(JSON.stringify(rows));
         res.end();
     });
 });
