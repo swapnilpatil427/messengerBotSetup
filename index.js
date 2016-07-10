@@ -90,18 +90,7 @@ function processEvent(event) {
                         let refugeePhone = params.RefugeePhone || "";
                         if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
                             // Set up the sender with you API key, prepare your recipients' registration tokens.
-                            var message = new gcm.Message({
-                                data: {
-                                    refugeeID: refugeeID,
-                                    refugeeZipCode: refugeeZipCode,
-                                    refugeePhone: refugeePhone,
-                                    message: "I am here, please find me, i need your help."
-                                },
-                                notification: {
-                                    title: "New Refugee Found",
-                                    body: "New Refugee found at location." + refugeeZipCode
-                                }
-                            });
+
                         /*    con.query('CALL read_refugee()', function(err, rows) {
                                 if (err) {
                                     console.log(err);
@@ -115,12 +104,17 @@ function processEvent(event) {
                                 console.log("I am here");
                             //    console.log("latitude" +response.latitude);
                             //    console.log("longitude" + response.longitude);
-                                con.query('CALL get_refugee('+response.latitude+','+response.longitude +')', function(err, rows) {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                    console.log(rows);
-                                });
+                            var message = new gcm.Message({
+                                data: {
+                                    refugeeID: response.latitude,
+                                    refugeeZipCode: refugeeZipCode,
+                                    refugeePhone: response.longitude,
+                                    message: "I am here, please find me, i need your help."
+                                },
+                                notification: {
+                                    title: "New Refugee Found",
+                                    body: "New Refugee found at location." + refugeeZipCode
+                                }
                             });
                             new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
                                 registrationTokens: regTokens
@@ -128,6 +122,14 @@ function processEvent(event) {
                                 if (err) console.error(err);
                                 else console.log(response);
                             });
+                                con.query('CALL get_refugee('+response.latitude+','+response.longitude +')', function(err, rows) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    console.log(rows);
+                                });
+                            });
+
                             //console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
                         }
                     }
