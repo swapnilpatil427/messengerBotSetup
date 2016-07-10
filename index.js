@@ -7,7 +7,7 @@ const uuid = require('node-uuid');
 const request = require('request');
 const JSONbig = require('json-bigint');
 const async = require('async');
-var geocoding = require('./geocoding')
+var geocoding = require('./geocoding');
 
 const REST_PORT = (process.env.PORT || 5000);
 const APIAI_ACCESS_TOKEN = "aae85be98a3747b2ae00b8f9654e3ab4";

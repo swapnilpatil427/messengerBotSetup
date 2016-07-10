@@ -72,7 +72,7 @@ geocoder.geocode('29 champs elysée paris', function(err, res) {
     console.log(res);
 });
 
-export.getAllVolunteers = function(address) {
+exports.getAllVolunteers = function(address) {
     getGeoCode(address, function(response) {
         return response;
         //notify(response.latitude , response.longitude);
