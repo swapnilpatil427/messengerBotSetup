@@ -87,9 +87,10 @@ function getAllNearByOrg (geocode) {
 
 // Or using Promise
 function getGeoCode(address, callback) {
+    console.log(address);
     geocoder.geocode(address)
         .then(function(res) {
-            console.log("dds");
+            console.log("I am here");
             callback(res[0]);
         })
         .catch(function(err) {

@@ -110,12 +110,10 @@ function processEvent(event) {
                                 console.log('Data received from Db:\n');
                                 console.log(rows);
                             }); */
-                            geocoder.geocode('201 S 4th Street, San Jose, California', function(err, res) {
-                                console.log(res[0].longitude);
-                            });
-                            /*geocoding.getAllVolunteers(refugeeZipCode, function(response) {
+                            
+                            geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                                 console.log("latitude" +response.longitude);
-                            });*/
+                            });
                             new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
                                 registrationTokens: regTokens
                             }, function(err, response) {
