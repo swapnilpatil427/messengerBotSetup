@@ -219,16 +219,11 @@ function sendFBMessage(sender, messageData, callback) {
                             "timestamp": "1428444852",
                             "elements": [{
                                 "title": "Medair ",
-                                "subtitle": "100% Soft and Luxurious Cotton",
-                                "quantity": 2,
-                                "price": 50,
-                                "currency": "USD"
+                                "subtitle": "100% Soft and Luxurious Cotton"
+
                             }, {
-                                "title": "Classic Gray T-Shirt",
-                                "subtitle": "100% Soft and Luxurious Cotton",
-                                "quantity": 1,
-                                "price": 25,
-                                "currency": "USD"
+                                "title": "Other Organisation",
+                                "subtitle": "Provides Food"
                             }],
                             "address": {
                                 "street_1": "1 Hacker Way",
