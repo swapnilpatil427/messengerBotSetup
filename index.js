@@ -212,13 +212,11 @@ function sendFBMessage(sender, messageData, callback) {
                         "payload": {
                             "template_type": "generic",
                             "elements": [{
-                                "title": "Welcome to Peter\'s Hats",
-                                "image_url": "http://petersapparel.parseapp.com/img/item100-thumb.png",
-                                "subtitle": "We\'ve got the right hat for everyone.",
+                                "title": "Medair",
+                                "subtitle": "Provides a help to all the refugees",
                                 "buttons": [{
-                                    "type": "web_url",
-                                    "url": "https://petersapparel.parseapp.com/view_item?item_id=100",
-                                    "title": "View Website"
+                                    "type": "phone_number",
+                                    "title": "4086685302"
                                 }, {
                                     "type": "postback",
                                     "title": "Start Chatting",
