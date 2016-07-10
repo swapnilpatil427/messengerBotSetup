@@ -114,7 +114,7 @@ module.exports = class TwilioBot {
                                                     elements = "Name : " + row.name + "Description :" + row.description + "phoneNumber :" + row.phone + "\n";
                                                 });
                                             }
-                                            res.status(200).end("<Response><Message>" +  + "</Message></Response>");
+                                            
                                         });
 
                                     });
