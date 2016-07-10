@@ -14,21 +14,7 @@ var con = mysql.createConnection({
     database: "heroku_f4cca122d17507a"
 });
 
-con.connect(function(err) {
-    if (err) {
-        console.log('Error connecting to Db');
-        return;
-    }
 
-    console.log('connected');
-
-    return;
-    /*con.end(function(err) {
-        // The connection is terminated gracefully
-        // Ensures all previously enqueued queries are still
-        // before sending a COM_QUIT packet to the MySQL server.
-    }); */
-});
 
 module.exports = class TwilioBot {
 
@@ -104,19 +90,32 @@ module.exports = class TwilioBot {
                                 if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
                                     geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                                         //console.log(response);
-                                        con.query('CALL get_organisation1(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+                                        con.connect(function(err) {
                                             if (err) {
-                                                console.log(err);
-                                            }
-                                            var elements = "";
-                                            if (rows[0].length != 0) {
-                                                rows[0].forEach(function(row) {
-                                                    elements = "Name : " + row.name + "Description :" + row.description + "phoneNumber :" + row.phone + "\n";
-                                                });
+                                                console.log('Error connecting to Db');
+                                                return;
                                             }
 
+                                            con.query('CALL get_organisation1(' + response.latitude + ',' + response.longitude + ')', function(err, rows) {
+                                                if (err) {
+                                                    console.log(err);
+                                                }
+                                                var elements = "";
+                                                if (rows[0].length != 0) {
+                                                    rows[0].forEach(function(row) {
+                                                        elements = "Name : " + row.name + "Description :" + row.description + "phoneNumber :" + row.phone + "\n";
+                                                    });
+                                                }
+
+                                                con.end();
+
+                                            });
+                                            /*con.end(function(err) {
+                                                // The connection is terminated gracefully
+                                                // Ensures all previously enqueued queries are still
+                                                // before sending a COM_QUIT packet to the MySQL server.
+                                            }); */
                                         });
-
                                     });
                                 }
                             }
