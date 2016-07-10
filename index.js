@@ -156,13 +156,13 @@ function afterResponseData(action, response, responseText) {
                 });
                 geocoding.getAllVolunteers(refugeeZipCode, function(response) {
                     console.log(response);
-                    /*con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
+                    con.query('CALL get_refugee('+response.latitude+','+response.longitude+')', function(err, rows) {
                         if (err) {
                             console.log(err);
                         }
 
                         console.log(rows);
-                    }); */
+                    });
                 });
 
             });
