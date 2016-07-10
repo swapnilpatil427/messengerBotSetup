@@ -90,7 +90,56 @@ function processEvent(event) {
                         });
                     }
                 } else if (isDefined(responseText)) {
-                    afterResponse(action,response);
+                    if (action === "actionID") {
+                        let params = response.result.parameters || "";
+                        let refugeeID = params.RefugeeID || "";
+                        let refugeeZipCode = params.RefugeeLocation || "";
+                        let refugeePhone = params.RefugeePhone || "";
+                        if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
+                            // Set up the sender with you API key, prepare your recipients' registration tokens.
+
+                        /*    con.query('CALL read_refugee()', function(err, rows) {
+                                if (err) {
+                                    console.log(err);
+                                }
+
+                                console.log('Data received from Db:\n');
+                                console.log(rows);
+                            }); */
+
+                            geocoding.getAllVolunteers(refugeeZipCode, function(response) {
+                                console.log("I am here");
+                            //    console.log("latitude" +response.latitude);
+                            //    console.log("longitude" + response.longitude);
+                            var message = new gcm.Message({
+                                data: {
+                                    refugeeID: response.latitude,
+                                    refugeeZipCode: refugeeZipCode,
+                                    refugeePhone: response.longitude,
+                                    message: "I am here, please find me, i need your help."
+                                },
+                                notification: {
+                                    title: "New Refugee Found",
+                                    body: "New Refugee found at location." + refugeeZipCode
+                                }
+                            });
+                            new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
+                                registrationTokens: regTokens
+                            }, function(err, response) {
+                                if (err) console.error(err);
+                                else console.log(response);
+                            });
+                                con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    console.log(rows);
+                                });
+                            });
+
+                            //console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
+                        }
+                    }
                     //console.log("params"+params.RefugeeLocation);
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
@@ -101,59 +150,6 @@ function processEvent(event) {
                 }
             }
         });
-
-        exports.afterResponse = function (action,response) {
-            if (action === "actionID") {
-                let params = response.result.parameters || "";
-                let refugeeID = params.RefugeeID || "";
-                let refugeeZipCode = params.RefugeeLocation || "";
-                let refugeePhone = params.RefugeePhone || "";
-                if (refugeeID != "" && refugeeZipCode != "" && refugeePhone != "") {
-                    // Set up the sender with you API key, prepare your recipients' registration tokens.
-
-                /*    con.query('CALL read_refugee()', function(err, rows) {
-                        if (err) {
-                            console.log(err);
-                        }
-
-                        console.log('Data received from Db:\n');
-                        console.log(rows);
-                    }); */
-
-                    geocoding.getAllVolunteers(refugeeZipCode, function(response) {
-                        console.log("I am here");
-                    //    console.log("latitude" +response.latitude);
-                    //    console.log("longitude" + response.longitude);
-                    var message = new gcm.Message({
-                        data: {
-                            refugeeID: response.latitude,
-                            refugeeZipCode: refugeeZipCode,
-                            refugeePhone: response.longitude,
-                            message: "I am here, please find me, i need your help."
-                        },
-                        notification: {
-                            title: "New Refugee Found",
-                            body: "New Refugee found at location." + refugeeZipCode
-                        }
-                    });
-                    new gcm.Sender('AIzaSyCu2ty53tCN0nCW94WCOlbbvATbZKoT3TU').send(message, {
-                        registrationTokens: regTokens
-                    }, function(err, response) {
-                        if (err) console.error(err);
-                        else console.log(response);
-                    });
-                        con.query('CALL get_refugee(37.383411,121.919662)', function(err, rows) {
-                            if (err) {
-                                console.log(err);
-                            }
-                            console.log(rows);
-                        });
-                    });
-
-                    //console.log("sddsd" + refugeeID + refugeeZipCode + refugeePhone);
-                }
-            }
-        };
 
         apiaiRequest.on('error', (error) => console.error(error));
         apiaiRequest.end();
