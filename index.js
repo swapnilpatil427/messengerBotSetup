@@ -90,7 +90,7 @@ function processEvent(event) {
                         }); */
                     }
                 } else if (isDefined(responseText)) {
-                    afterResponse(action, response, responseText);
+                    afterResponseData(action, response, responseText);
                     //console.log("params"+params.RefugeeLocation);
                     var splittedText = splitResponse(responseText);
                     async.eachSeries(splittedText, (textPart, callback) => {
