@@ -61,7 +61,7 @@ con.query('CALL read_refugee()', function(err, rows) {
 });
 
 var gcm = require('node-gcm');
-var regTokens = ['d_ml69GlF_c:APA91bGLaoCbEGQ_qlUbhOSH2NOTsxE5rF_Z-uz56asDVN0VvDieZuzrMovdrJRcCf5-WAJbvUx9nG_5QdcW7NT16jBiZPqB6Km7cA8k04-UIVMillz5f0-iJiPJpF3MmQuxhBTYkfNL'];
+var regTokens = ['eTAhKXGmMyk:APA91bG0vkKehF24-57gEg_jUtNXmSAv0RbYfOdHN1eJxh8Vt0SwvnwGdJ0u0s4vYuha4N36fASZb6cASXmosrrsTWj-R3SpasV2A8zWne-TkhCaPNrqyDqSHqSJEIc0Ck_ySDpcl4SU'];
 
 function processEvent(event) {
     var sender = event.sender.id.toString();

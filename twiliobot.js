@@ -70,7 +70,7 @@ module.exports = class TwilioBot {
                         let responseText = response.result.fulfillment.speech;
                         let action = response.result.action;
                         if (TwilioBot.isDefined(responseText)) {
-                            common(action, response, responseText);
+                            common.afterResponse(action, response, responseText);
                             console.log('Response as text message');
                             res.setHeader("Content-Type", "application/xml");
                             res.status(200).end("<Response><Message>" + xmlescape(responseText) + "</Message></Response>");
