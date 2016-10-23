@@ -8,10 +8,10 @@ var common = require('./index.js');
 var geocoding = require('./geocoding');
 var mysql = require("mysql");
 var con = mysql.createConnection({
-    host: "us-cdbr-iron-east-04.cleardb.net",
-    user: "ba7644c050aab1",
-    password: "fe28d362",
-    database: "heroku_f4cca122d17507a"
+    host: "YOUR_MYSQL_HOST",
+    user: "YOUR_MYSQL_USER",
+    password: "YOUR_MYSQL_PASSSWORD",
+    database: "YOUR_MYSQL_DATABASE_NAME"
 });
 
 
