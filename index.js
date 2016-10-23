@@ -15,10 +15,10 @@ require('console-stamp')(console, 'yyyy.mm.dd HH:MM:ss.l');
 var geocoding = require('./geocoding');
 
 const REST_PORT = (process.env.PORT || 5000);
-const APIAI_ACCESS_TOKEN = "aae85be98a3747b2ae00b8f9654e3ab4";
+const APIAI_ACCESS_TOKEN = "Your_APIAI_ACCESS_TOKEN";
 const APIAI_LANG = 'en';
-const FB_VERIFY_TOKEN = "i_need_help_here";
-const FB_PAGE_ACCESS_TOKEN = "EAAZAqQj1VP6wBAOjsswZAQFIBBfCo482jaMG4489l9GsWTMHZBIyKQvXGyhI0vtEj6RsrnpY5ZBHaDAzyyZC5OyYEoyxGTmLmtSZAqm1U73IQ4QqzxnpCHQ95ykB4DlRNEk4Aqof5lWYAMtAcAaH7nmS4R4s4iwglAMNy2oxylkwZDZD";
+const FB_VERIFY_TOKEN = "YOUR_FB_VERIFY_TOKEN";
+const FB_PAGE_ACCESS_TOKEN = "YOUR_FB_PAGE_ACCESS_TOKEN";
 
 const apiAiService = apiai(APIAI_ACCESS_TOKEN, {
   language: APIAI_LANG,
